@@ -36,7 +36,7 @@
  ======================================================================"
 
 
-"PORTING : GST doesn't seem to have Monitors. Use Semaphore instead..."
+"PORTING : GST doesn't seem to have Monitors. Use RecursionLock instead..."
 
 
 Object subclass: SDActiveRecord [
@@ -171,7 +171,7 @@ Object subclass: SDActiveRecord [
 
     SDActiveRecord class >> lockFor: anInstance [
 	<category: 'queries private'>
-	^locks at: anInstance id ifAbsentPut: [Semaphore forMutualExclusion]
+	^locks at: anInstance id ifAbsentPut: [RecursionLock new]
     ]
 
     SDActiveRecord class >> store [
