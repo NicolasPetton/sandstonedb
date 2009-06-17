@@ -55,6 +55,8 @@ Object subclass: SDActiveRecord [
     SDActiveRecord class [
 	| locks |
 	
+    Store := nil.
+
     ]
 
     SDActiveRecord class >> new [
@@ -62,14 +64,12 @@ Object subclass: SDActiveRecord [
 	^self basicNew initialize
     ]
 
-    Store := nil.
-smalltalk forum franc
     SDActiveRecord class >> atId: anId [
 	"hitting this in a tight loop for a class with subclasses can be very
 	expensive because allCaches has to concatenate all the subclasses
 	caches into a new copy that contains all subclass records"
-
 	<category: 'queries'>
+
 	^self atId: anId ifAbsent: [nil]
     ]
 
@@ -77,8 +77,8 @@ smalltalk forum franc
 	"hitting this in a tight loop for a class with subclasses can be very
 	expensive because allCaches has to concatenate all the subclasses
 	caches into a new copy that contains all subclass records"
-
 	<category: 'queries'>
+
 	^Store 
 	    forClass: self
 	    at: anId
@@ -88,8 +88,8 @@ smalltalk forum franc
     SDActiveRecord class >> do: aBlock [
 	"do on a copy in case the do modifies the collection I'm trying
 	to iterate'"
-
 	<category: 'queries'>
+
 	Store forClass: self do: aBlock
     ]
 
@@ -159,12 +159,6 @@ smalltalk forum franc
     ]
 
     SDActiveRecord class >> initialize [
-	"SDCheckPointer now handles startUp:, this
-	 cleans up any previously registered ActiveRecord
-	 startUp processes"
-
-	"self initialize"
-
 	<category: 'initialization'>
 	Store := self defaultStore.
     ]
@@ -185,12 +179,21 @@ smalltalk forum franc
 	^Store
     ]
 
+    initialize [
+	<category: 'initialize-release'>
+	super initialize.
+	id := UUID new asString36.
+	createdOn := updatedOn := TimeStamp now.
+	version := 0.
+	isNew := true
+    ]
+
     = anObject [
 	"asking the object isMemberOf ensures that if it's a proxy that message
 	 will be forwarded to the real object.  Checking this condition in reverse
 	 anObject class, will fail because anObject class will be the ProxyClass"
-
 	<category: 'comparing'>
+
 	^(anObject isMemberOf: self class) and: [id = anObject id]
     ]
 
@@ -201,8 +204,8 @@ smalltalk forum franc
 
     abortChanges [
 	"Rollback object to the last saved version"
-
 	<category: 'actions'>
+
 	Store abortChanges: self
     ]
 
@@ -214,8 +217,8 @@ smalltalk forum franc
     delete [
 	"I'm using monitors for locking so this can be wrapped in larger critical
 	 in your application code if you want more scope on the critical'"
-
 	<category: 'actions'>
+
 	self critical: 
 		[self onBeforeDelete.
 		Store removeObject: self.
@@ -226,8 +229,8 @@ smalltalk forum franc
     save [
 	"I'm using monitors for locking so this can be wrapped in larger critical
 	 in your application code if you want more scope on the critical'"
-
 	<category: 'actions'>
+
 	| isFirstSave |
 	^self critical: 
 		[self validate.
@@ -250,8 +253,8 @@ smalltalk forum franc
 
     validate [
 	"for subclasses to override and throw exceptions to prevent saves"
-
 	<category: 'actions'>
+
 	
     ]
 
@@ -295,8 +298,8 @@ smalltalk forum franc
     indexString [
 	"All instance variable's asStrings as a single delimeted string for
 	easy searching"
-
 	<category: 'accessing'>
+
 	^String streamContents: 
 		[:s | 
 		self class allInstVarNames do: 
@@ -318,68 +321,59 @@ smalltalk forum franc
 	^version
     ]
 
-    initialize [
-	<category: 'initialize-release'>
-	super initialize.
-	id := UUID new asString36.
-	createdOn := updatedOn := TimeStamp now.
-	version := 0.
-	isNew := true
-    ]
-
     isNew [
 	"Only answers true before an objects first save."
-
 	<category: 'testing'>
+
 	^isNew ifNil: [isNew := true]
     ]
 
     isSandstoneActiveRecord [
 	"Answers true if the receiver is a Sandstone Active Record."
-
 	<category: 'testing'>
+
 	^true
     ]
 
     onAfterDelete [
 	"for overriding in subclasses to hook the objects lifecycle"
-
 	<category: 'events'>
+
 	
     ]
 
     onAfterFirstSave [
 	"for overriding in subclasses to hook the objects lifecycle"
-
 	<category: 'events'>
+
 	
     ]
 
     onAfterSave [
 	"for overriding in subclasses to hook the objects lifecycle"
-
 	<category: 'events'>
+
 	
     ]
 
     onBeforeDelete [
 	"for overriding in subclasses to hook the objects lifecycle"
-
 	<category: 'events'>
+
 	
     ]
 
     onBeforeFirstSave [
 	"for overriding in subclasses to hook the objects lifecycle"
-
 	<category: 'events'>
+
 	createdOn := TimeStamp now
     ]
 
     onBeforeSave [
 	"for overriding in subclasses to hook the objects lifecycle"
-
 	<category: 'events'>
+
 	updatedOn := TimeStamp now.
 	version := version + 1.
 	isNew := false
