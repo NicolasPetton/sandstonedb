@@ -36,7 +36,7 @@
  ======================================================================"
 
 
-"PORTING : GST doesn't seem to have Monitors. Use Semaphore instead..."
+"PORTING : GST doesn't seem to have Monitors. Use RecursionLock instead..."
 
 
 Object subclass: SDConcurrentDictionary [
@@ -118,7 +118,7 @@ Object subclass: SDConcurrentDictionary [
 	super initialize.
 	"I'm using a Monitor rather than a Semaphor here because I need to support
 	 reentrant operations by the same process, a Semaphor is too low level"
-	lock := Semaphore forMutualExclusion
+	lock := RecursionLock new
     ]
 
     removeAll [
