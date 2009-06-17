@@ -57,6 +57,11 @@ Object subclass: SDActiveRecord [
 	
     ]
 
+    SDActiveRecord class >> new [
+	<category: 'instance creation'>
+	^self basicNew initialize
+    ]
+
     Store := nil.
 smalltalk forum franc
     SDActiveRecord class >> atId: anId [
