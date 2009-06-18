@@ -1,0 +1,134 @@
+"======================================================================
+|
+|   Sandstone.SDFileStoreTests class definition
+|
+ ======================================================================"
+
+"======================================================================
+|
+| Copyright (c) 2008-2009 
+| Ramon Leon <ramon.leon@allresnet.com>,
+| 
+|  Ported by:
+|
+| Sebastien Audier <sebastien.audier@gmail.com>
+| Nicolas Petton   <petton.nicolas@gmail.com>
+|
+| Permission is hereby granted, free of charge, to any person obtaining
+| a copy of this software and associated documentation files (the 
+| 'Software'), to deal in the Software without restriction, including 
+| without limitation the rights to use, copy, modify, merge, publish, 
+| distribute, sublicense, and/or sell copies of the Software, and to 
+| permit persons to whom the Software is furnished to do so, subject to 
+| the following conditions:
+|
+| The above copyright notice and this permission notice shall be 
+| included in all copies or substantial portions of the Software.
+|
+| THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, 
+| EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+| MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+| IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
+| CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+| TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+| SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  
+|
+ ======================================================================"
+
+
+
+SDActiveRecordTests subclass: SDFileStoreTests [
+    
+    <comment: nil>
+    <category: 'SandstoneDb-Tests'>
+
+    SDFileStoreTests class >> isAbstract [
+	<category: 'testing'>
+	^false
+    ]
+
+    defaultStore [
+	<category: 'defaults'>
+	^SDFileStore new
+    ]
+
+    testDeleteFailedCommits [
+	<category: 'running'>
+	kid save.
+	(store dirForClass: kid class atId: kid id) primRename: kid id , '.obj'
+	    to: kid id , '.obj.new'.
+	self assert: ((store dirForClass: kid class atId: kid id) 
+		    fileExists: kid id , '.obj').
+	self assert: ((store dirForClass: kid class atId: kid id) 
+		    fileExists: kid id , '.obj.new').
+	store deleteFailedCommitsForClass: kid class.
+	self assert: ((store dirForClass: kid class atId: kid id) 
+		    fileExists: kid id , '.obj').
+	self deny: ((store dirForClass: kid class atId: kid id) 
+		    fileExists: kid id , '.obj.new')
+    ]
+
+    testDeleteOldVersions [
+	<category: 'running'>
+	| id |
+	kid save.
+	kid save.
+	id := kid id.
+	kid delete.
+	self 
+	    assert: ((store dirForClass: kid class atId: id) 
+		    fileMatching: id , '\.*') isEmpty
+    ]
+
+    testFinishPartialCommits [
+	<category: 'running'>
+	kid save.
+	"File name: (/fds/fds/fds.obj) renameTo: ...."
+	File name: (store dirForClass: kid class atId: kid id) rename: kid id , '.obj'
+	    toBe: kid id , '.obj.new'.
+	self deny: ((store dirForClass: kid class atId: kid id) 
+		    fileExists: kid id , '.obj').
+	self assert: ((store dirForClass: kid class atId: kid id) 
+		    fileExists: kid id , '.obj.new').
+	store finishPartialCommitsForClass: kid class.
+	self assert: ((store dirForClass: kid class atId: kid id) 
+		    fileExists: kid id , '.obj').
+	self deny: ((store dirForClass: kid class atId: kid id) 
+		    fileExists: kid id , '.obj.new')
+    ]
+
+    testLoadMissingFile [
+	<category: 'running'>
+	kid save.
+	(store dirForClass: kid class atId: kid id) 
+	    deleteFileNamed: kid id , '.obj'.
+	self should: [store loadClass: kid class atId: kid id] raise: SDLoadError
+    ]
+
+    testSaveMissingFile [
+	<category: 'running'>
+	self assert: kid isNew.
+	kid save.
+	self deny: kid isNew.
+	(store dirForClass: kid class atId: kid id) 
+	    deleteFileNamed: kid id , '.obj'.
+	kid save.
+	self deny: kid isNew
+    ]
+
+    testStorageDir [
+	"Active records id's must find a proper subdirectory entry in the defined structure"
+
+	<category: 'running'>
+	| ids legalNames |
+	legalNames := (0 to: 9) collect: [:e | e printString].
+	ids := Set new: 1000.
+	1000 timesRepeat: [ids add: UUID new asString36].
+	ids add: 'abaoblwgnaydxokccorveamoq'.
+	ids do: 
+		[:anId | 
+		self assert: (legalNames 
+			    includes: (store dirForClass: SDPersonMock atId: anId) localName)]
+    ]
+]
+
