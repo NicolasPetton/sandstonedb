@@ -112,9 +112,9 @@ SDCachedStore subclass: SDFileStore [
 	| dir |
 	self removeCachedOfClass: anObject class from: anObject id.
 	dir := self dirForClass: anObject class atId: anObject id.
-	dir deleteFileNamed: anObject id , '.obj'.
+	dir remove: anObject id , '.obj'.
 	"kill any other versions or failed commits of this object"
-	(dir fileNamesMatching: anObject id , '.*') 
+	(dir allFilesMatching: anObject id , '.*') 
 	    do: [:e | dir deleteFileNamed: e]
     ]
 
