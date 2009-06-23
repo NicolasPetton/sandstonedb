@@ -55,7 +55,7 @@ SDActiveRecordTests subclass: SDFileStoreTests [
     testDeleteFailedCommits [
 	<category: 'running'>
 	kid save.
-	(store dirForClass: kid class atId: kid id) primRename: kid id , '.obj'
+	(store dirForClass: kid class atId: kid id) nameAt: kid id , '.obj'
 	    to: kid id , '.obj.new'.
 	self assert: ((store dirForClass: kid class atId: kid id) 
 		    fileExists: kid id , '.obj').
@@ -101,7 +101,7 @@ SDActiveRecordTests subclass: SDFileStoreTests [
 	<category: 'running'>
 	kid save.
 	(store dirForClass: kid class atId: kid id) 
-	    deleteFileNamed: kid id , '.obj'.
+	    remove: kid id , '.obj'.
 	self should: [store loadClass: kid class atId: kid id] raise: SDLoadError
     ]
 
@@ -111,7 +111,7 @@ SDActiveRecordTests subclass: SDFileStoreTests [
 	kid save.
 	self deny: kid isNew.
 	(store dirForClass: kid class atId: kid id) 
-	    deleteFileNamed: kid id , '.obj'.
+	    remove: kid id , '.obj'.
 	kid save.
 	self deny: kid isNew
     ]
