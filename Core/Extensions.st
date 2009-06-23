@@ -81,7 +81,7 @@ Object extend [
     ]
 
     sandstoneResolveReferencesVisits: visitedParts [
-	<category: '*sandstone-serialization'>
+	<category: '*sandstonedb-serialization'>
 	"Make components of the introspectee which are
 	Sandstone references to active record to become active records.
 	Do this deeply (sub components)."
@@ -108,7 +108,7 @@ Object extend [
     ]
 
     isSandstoneActiveRecord [
-	<category: '*isSandstoneActiveRecord'>
+	<category: '*sandstonedb'>
 
 	"Answers true if the receiver is
 	a Sandstone Active Record."
@@ -116,14 +116,14 @@ Object extend [
     ]
 
     isSandstoneMarker [
-	<category: '*isSandstoneMarker'>
+	<category: '*sandstonedb'>
 	^false
     ]
 ]
 
 Collection extend [
     
-    sandstoneDeepCopyVisits: [
+    sandstoneDeepCopyVisits: visitedParts[
 	<category: '*sandstonedb'>
     
 	"sandstoneDeepCopy works just like deepCopy until it hits another active record
@@ -228,6 +228,8 @@ Bag extend [
 	"Make components of the introspectee which are
 	Sandstone active records to become references.
 	Do this deeply (sub components)."
+	<category: '*sandstonedb'>
+
 	self class isMeta ifTrue: [^self].
 	self deservesSandstoneReferenceMark ifFalse: [^self].
 	self deservesSandstoneReferenceMark ifFalse: [:it | ^self].
@@ -242,12 +244,15 @@ Bag extend [
 	"Make components of the introspectee which are
 	Sandstone references to active record to become active records.
 	Do this deeply (sub components)."
+
 	self class isMeta ifTrue: [^self].
 	visitedParts at: self ifPresent: [:it | ^self].
 	visitedParts at: self put: self.
 	self copy valuesAndCounts sandstoneResolveReferencesVisits: visitedParts.
 	^self
     ]
+]
+
 
 Character extend [
 
