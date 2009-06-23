@@ -277,52 +277,6 @@ Character extend [
     ]
 ]
 
-DataStream class extend [
-
-    fileNamed: aName do: aBlock [
-	<category:'*sandstonedb'>
-	| file |
-	file := self fileNamed: aName.
-	^ file
-	    ifNil: [nil]
-	    ifNotNil: [[aBlock value: file] ensure: [file close]
-    ]
-
-    newFileNamed: aName do: aBlock [
-	<category: '*sandstonedb'>
-	| file |
-	file := self newFileNamed: aName.
-	^file
-	    ifNil: [nil]
-	    ifNotNil: [[aBlock value: file ] ensure: [ file close ]
-    ]
-
-    oldFileNamed: aName do: aBlock [
-	<category: '*sandstonedb'>
-	| file |
-	file := self oldFileNamed: aName.
-	^ file
-	    ifNil: [nil]
-	    ifNotNil: [[aBlock value: file] ensure: [file close]]
-    ]
-
-    readOnlyFileNamed: aString [
-	<category: '*sandstonedb'>
-	| strm |
-	strm := self on: (FileStream readOnlyFileNamed: aString).
-	strm byteStream setFileTypeToObject.
-	^strm
-    ]
-
-    readOnlyFileNamed: aName do: aBlock [
-	<category: '*sandstonedb'>
-	file := self readOnlyFileNamed: aName.
-	^file
-	    ifNil: [nil]
-	    ifNotNil: [[aBlock value: file] ensure: [file close]]
-    ]
-]
-
 Dictionary extend [
     
     sandstoneDeepCopyVisits: visitedParts [
