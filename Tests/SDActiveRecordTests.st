@@ -226,6 +226,14 @@ TestCase subclass: SDActiveRecordTests [
 	self assert: (SDPersonMock find: [:each | each id = 'not']) isNil
     ]
 
+    testFindAll [
+	<category: 'running'>
+	kid save.
+	self flushAndReload.
+	self assert: (SDPersonMock findAll class = Array).
+	self assert: (SDPersonMock findAll: [:each | each id = 'not' ]) class = Array
+    ]
+
     testFindById [
 	<category: 'running'>
 	kid save.
