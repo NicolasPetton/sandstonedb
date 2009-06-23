@@ -1,0 +1,47 @@
+<package>
+  <name>Sandstone</name>
+  <namespace>Sandstone</namespace>
+
+  <filein>Core/SDAbstractStore.st</filein>
+  <filein>Core/SDConcurrentDictionary.st</filein>
+  <filein>Core/Extensions.st</filein>
+  <filein>Core/SDCheckPointer.st</filein>
+  <filein>Core/SDActiveRecord.st</filein>
+  <filein>Core/SDError.st</filein>
+  <filein>Core/SDLoadError.st</filein>
+  <filein>Core/SDCommitError.st</filein>
+  <filein>Core/SDCachedStore.st</filein>
+  <filein>Store/SDFileStore.st</filein>
+  <filein>Store/SDMemoryStore.st</filein>
+  <filein>Tests/SDActiveRecordTests.st</filein>
+  <filein>Tests/SDPersonMock.st</filein>
+  <filein>Tests/SDFileStoreTests.st</filein>
+  <filein>Tests/FooObject.st</filein>
+  <filein>Tests/SDMemoryStoreTests.st</filein>
+  <filein>Tests/SDWomanMock.st</filein>
+  <filein>Tests/SDManMock.st</filein>
+  <filein>Tests/SDChildMock.st</filein>
+  <filein>Tests/SDGrandChildMock.st</filein>
+
+
+  <file>Core/SDConcurrentDictionary.st</file>
+  <file>Core/Extensions.st</file>
+  <file>Core/SDCheckPointer.st</file>
+  <file>Core/SDActiveRecord.st</file>
+  <file>Core/SDError.st</file>
+  <file>Core/SDLoadError.st</file>
+  <file>Core/SDAbstractStore.st</file>
+  <file>Core/SDCommitError.st</file>
+  <file>Core/SDCachedStore.st</file>
+  <file>Store/SDFileStore.st</file>
+  <file>Store/SDMemoryStore.st</file>
+  <file>Tests/SDActiveRecordTests.st</file>
+  <file>Tests/SDMemoryStoreTests.st</file>
+  <file>Tests/SDPersonMock.st</file>
+  <file>Tests/SDFileStoreTests.st</file>
+  <file>Tests/FooObject.st</file>
+  <file>Tests/SDWomanMock.st</file>
+  <file>Tests/SDManMock.st</file>
+  <file>Tests/SDChildMock.st</file>
+  <file>Tests/SDGrandChildMock.st</file>
+</package>
