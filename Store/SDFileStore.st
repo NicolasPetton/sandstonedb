@@ -77,7 +77,7 @@ SDCachedStore subclass: SDFileStore [
 	<category: 'actions'>
 	| dir |
 	dir := (self dirForClass: aClass) createDirectory.
-	0 to: 9 do: [:num | (dir directoryNamed: num asString) createDirectory].
+	0 to: 9 do: [:num | (dir nameAt: num printString) createDirectory].
 	cache at: aClass
 	    ifAbsentPut: 
 		[SDConcurrentDictionary on: (Dictionary new: self defaultCacheSize)]
@@ -115,7 +115,7 @@ SDCachedStore subclass: SDFileStore [
 	dir remove: anObject id , '.obj'.
 	"kill any other versions or failed commits of this object"
 	(dir allFilesMatching: anObject id , '.*') 
-	    do: [:e | dir deleteFileNamed: e]
+	    do: [:e | dir remove: e]
     ]
 
     storeObject: origObject [
@@ -131,23 +131,23 @@ SDCachedStore subclass: SDFileStore [
 	newVersion := currentVersion , '.new'.
 	oldVersion := currentVersion , '.old'.
 	"just in case a previous commit failed and left junk around"
-	dir deleteFileNamed: newVersion.
+	dir remove: newVersion.
 	"the flush ensures all data is actually written to disk before moving on"
-	SmartRefStream newFileNamed: newVersion
+	ObjectDumper nameAt: newVersion
 	    do: 
 		[:file | 
 		file
 		    sandstoneNextPutObjOnly: anObject;
 		    flush].
 	"just in case any junk was lying around that failed to die on last commit"
-	dir deleteFileNamed: oldVersion.
+	dir remove: oldVersion.
 	"the pre-commit, on first save there won't be a current version, and fileExists is
 	 too expensive to check when it'll always be there except on first save"
 	[dir sandstoneRename: currentVersion toBe: oldVersion] ifError: [].
 	"now the actual commit"
 	dir sandstoneRename: newVersion toBe: currentVersion.
 	"clean up the junk (could fail if OS has lock on it for some reason)"
-	dir deleteFileNamed: oldVersion
+	dir remove: oldVersion
     ]
 
     updateObject: anObject [
