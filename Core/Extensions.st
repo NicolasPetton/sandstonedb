@@ -284,7 +284,7 @@ Dictionary extend [
 
 	"sandstoneDeepCopy works just like deepCopy until it hits another active record
 	at which point the copying stops, and the actual references is returned."
-	|newOject|
+	|newObject|
 	visitedParts at: self ifPresent: [ :it | ^it].
 	newObject := self copy.
 	newObject keysAndValuesDo:
