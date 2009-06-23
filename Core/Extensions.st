@@ -108,7 +108,7 @@ Object extend [
     ]
 
     isSandstoneActiveRecord [
-	<category: '*isSandstoneActiveRecord'
+	<category: '*isSandstoneActiveRecord'>
 
 	"Answers true if the receiver is
 	a Sandstone Active Record."
@@ -116,7 +116,7 @@ Object extend [
     ]
 
     isSandstoneMarker [
-	<category: '*isSandstoneMarker'
+	<category: '*isSandstoneMarker'>
 	^false
     ]
 ]
