@@ -277,29 +277,6 @@ Character extend [
     ]
 ]
 
-Complex extend [
-
-    sandstoneDeepCopy [
-	<category: '*sandstonedb'>
-	^self
-    ]
-
-    sandstoneDeepCopyVisits: visitedParts [
-	<category: '*sandstonedb'>
-	^self
-    ]
-
-    sandstoneMarkReferencesVisits: visitedParts [
-	<category: '*sandstonedb'>
-	^self
-    ]
-
-    sandstoneResolveReferencesVisits: visitedParts [
-	<category: '*sandsonedb'>
-	^self
-    ]
-]
-
 DataStream class extend [
 
     fileNamed: aName do: aBlock [
