@@ -55,7 +55,7 @@ Object subclass: SDCheckPointer [
 	aspect == #returnFromSnapshot ifTrue: [
 	    self startUp: true].
 	aspect == #aboutToQuit ifTrue: [
-	    self shutDown: [true]
+	    self shutDown: true]
     ] 
 
     SDCheckPointer class >> shutDown: isDown [
