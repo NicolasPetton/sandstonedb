@@ -328,7 +328,7 @@ Dictionary extend [
 	    [ :key :each |
 	    each isSandstoneMarker
 		ifTrue: [self at: key put: each asOriginalObject]
-		ifFalse: [each sandstoneResolveReferencesVisits: visitedParts]]
+		ifFalse: [each sandstoneResolveReferencesVisits: visitedParts]].
 	^self
     ]
 ]
