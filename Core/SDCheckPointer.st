@@ -45,13 +45,13 @@ Object subclass: SDCheckPointer [
     newer than the image.  This is essentially just like flushing the contents
     of a transaction log to the main database file.'>
 
-    SDCheckPointer class >> update: [
+    SDCheckPointer class >> update: anAspect [
 	"SDCheckPointer will act as the single agent to ensure all active record
 	 subclasses are correctly initialized on start up."
 
 	"self initialize"
-
 	<category: 'initialization'>
+
 	aspect == #returnFromSnapshot ifTrue: [
 	    self startUp: true].
 	aspect == #aboutToQuit ifTrue: [
