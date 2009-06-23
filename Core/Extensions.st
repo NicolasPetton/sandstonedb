@@ -39,7 +39,7 @@ Object extend [
     ]
 
     sandstoneInitialHashSize [
-	<category: '*sandstonedb-serialization'
+	<category: '*sandstonedb-serialization'>
 	^10000
     ]
 
