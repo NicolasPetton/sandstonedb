@@ -121,7 +121,7 @@ Object subclass: SDActiveRecord [
 
     SDActiveRecord class >> findAll: aBlock [
 	<category: 'queries'>
-	^Store forClass: self findAll: aBlock
+	^(Store forClass: self findAll: aBlock) values
     ]
 
     SDActiveRecord class >> commit: aBlock [
