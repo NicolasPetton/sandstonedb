@@ -25,6 +25,8 @@
   </sunit>
 </test>
 
+  <filein>magritte-gst.st</filein>
+  <filein>magritte-model.st</filein>
   <filein>Core/SDAbstractStore.st</filein>
   <filein>Core/SDCachedStore.st</filein>
   <filein>Store/SDFileStore.st</filein>
@@ -37,6 +39,8 @@
   <filein>Core/SDCommitError.st</filein>
   <filein>Store/SDMemoryStore.st</filein>
 
+  <file>magritte-gst.st</file>
+  <file>magritte-model.st</file>
   <file>Core/SDAbstractStore.st</file> 
   <file>Core/SDCachedStore.st</file>
   <file>Store/SDFileStore.st</file>
