@@ -100,6 +100,7 @@ Object extend [
 			put: var asOriginalObject ]
 		ifFalse: [var sandstoneResolveReferencesVisits: visitedParts ]].
 	^self
+    ]
 
     deservesSandstoneReferenceMark [
 	<category: '*sandstonedb-testing'>
