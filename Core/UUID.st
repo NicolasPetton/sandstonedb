@@ -34,7 +34,7 @@
 ByteArray subclass: UUID [
     
     <shape: #byte>
-    <category: 'Seaside-Core-Utilities'>
+    <category: 'Sandstone'>
     <comment: 'I am a UUID.  Sending #new generates a UUIDv1.'>
 
     Node := nil.
