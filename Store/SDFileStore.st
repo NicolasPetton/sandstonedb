@@ -76,7 +76,7 @@ SDCachedStore subclass: SDFileStore [
     ensureForClass: aClass [
 	<category: 'actions'>
 	| dir |
-	dir := (File name: (self dirForClass: aClass)) createDirectories.
+	dir := (self dirForClass: aClass) createDirectories.
 	0 to: 9 do: [:num | 
 	    (File name: (dir nameAt: num printString)) createDirectories].
 	cache at: aClass
@@ -86,8 +86,7 @@ SDCachedStore subclass: SDFileStore [
 
     loadClass: aClass atId: anId [
 	<category: 'actions'>
-	^
-	[(ObjectDumper on: ((self dirForClass: aClass atId: anId) 
+	^[(ObjectDumper on: ((self dirForClass: aClass atId: anId) 
 	    fullNameFor: anId , '.obj')) load] 
 		on: Error
 		do: [:err | SDLoadError signal: err messageText]
@@ -188,15 +187,15 @@ SDCachedStore subclass: SDFileStore [
 	[parentClass == SDActiveRecord] whileFalse: 
 		[lineage addFirst: parentClass.
 		parentClass := parentClass superclass].
-	^lineage inject: self defaultBaseDirectory
-	    into: [:dir :each | dir nameAt: each name]
+	^File name: (lineage inject: self defaultBaseDirectory
+	    into: [:dir :each | dir nameAt: each name])
     ]
 
     dirForClass: aClass atId: anId [
 	"Grab the correct hashed subdirectory for this record"
 
 	<category: 'queries'>
-	^(self dirForClass: aClass) nameAt: (self dirNameFor: anId)
+	^File name: ((self dirForClass: aClass) nameAt: (self dirNameFor: anId))
     ]
 
     dirNameFor: anId [
@@ -230,9 +229,8 @@ SDCachedStore subclass: SDFileStore [
 	"all remaining .new files are failed commits, kill them"
 
 	<category: 'crash recovery'>
-	
 	[(self dirForClass: aClass) 
-	    allFilesMatching: '\.new$' 
+	    allFilesMatching: '.new' 
 	    do: [:each | each remove]] 
 		on: Error
 		do: [:err | Transcript show: err]
@@ -243,42 +241,29 @@ SDCachedStore subclass: SDFileStore [
 	 .obj to finish commit'"
 
 	<category: 'crash recovery'>
-	
 	[(self dirForClass: aClass)  
-	    allFilesMatching: '\.new$' 
-	    do: 
-		[:each || objFile dir |
-		objFile := File name: (each name copyReplacingAllRegex: '\.new' with: '').
-		objFile exists ifFalse: [each renameTo: objFile name]]]
-		on: Error
-		do: 
-		    [:err | 
-		    Transcript
-			show: err;
-			cr]
+	    allFilesMatching: '.new' 
+	    do: [:each || objFile dir |
+		    objFile := File name: (each name copyReplacingAllRegex: '.new' with: '').
+		    objFile exists ifFalse: [each renameTo: objFile name]]]
+	    on: Error
+	    do: [:err | Transcript show: err; cr].
     ]
 
     loadChangesForClass: aClass [
 	<category: 'crash recovery'>
 	| id obj |
-	(self dirForClass: aClass) withSubdirectoriesDo: 
-		[:dir | 
-		[dir entries do: 
-			[:each | 
-			"there could be tens of thousands of entries, so using do with
-			 a condition to avoid the copy a select would generate"
-			each isDirectory 
-			    ifFalse: 
-				[id := each name copyUpTo: $..
-				obj := (cache at: aClass) at: id ifAbsent: [nil].
-				obj ifNil: [self cachedLoadOfClass: aClass from: id]
-				    ifNotNil: [obj abortChanges]]]] 
+	(self dirForClass: aClass) all namesDo: [:each |
+	    "there could be tens of thousands of entries, so using do with
+	    a condition to avoid the copy a select would generate"
+	    [(File name: ((self dirForClass: aClass) nameAt: each)) isDirectory ifFalse: [
+		id := each copyUpTo: $..
+		obj := (cache at: aClass) at: id ifAbsent: [nil].
+		obj ifNil: [self cachedLoadOfClass: aClass from: id]
+		    ifNotNil: [obj abortChanges]]] 
 			on: Error
-			do: 
-			    [:err | 
-			    Transcript
-				show: err;
-				cr]]
+			do: [:err | Transcript show: err; cr]]
+			. 'coucou' printNl
     ]
 
     initialize [
