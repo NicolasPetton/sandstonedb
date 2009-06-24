@@ -25,7 +25,7 @@
   </sunit>
 </test>
 
-  <filein>magritte/UUID.st</filein>
+  <filein>Core/UUID.st</filein>
   <filein>Core/SDAbstractStore.st</filein>
   <filein>Core/SDCachedStore.st</filein>
   <filein>Store/SDFileStore.st</filein>
@@ -38,7 +38,7 @@
   <filein>Core/SDCommitError.st</filein>
   <filein>Store/SDMemoryStore.st</filein>
 
-  <file>magritte/UUID.st</file>
+  <file>Core/UUID.st</file>
   <file>Core/SDAbstractStore.st</file> 
   <file>Core/SDCachedStore.st</file>
   <file>Store/SDFileStore.st</file>
