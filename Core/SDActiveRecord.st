@@ -160,7 +160,7 @@ Object subclass: SDActiveRecord [
 
     SDActiveRecord class >> initialize [
 	<category: 'initialization'>
-	Store := self defaultStore.
+	Store := self defaultStore
     ]
 
     SDActiveRecord class >> setStore: aStore [
@@ -182,7 +182,7 @@ Object subclass: SDActiveRecord [
     initialize [
 	<category: 'initialize-release'>
 	super initialize.
-	id := UUID new asString36.
+	id := UUID new.
 	createdOn := updatedOn := TimeStamp now.
 	version := 0.
 	isNew := true
