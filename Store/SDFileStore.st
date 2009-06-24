@@ -204,7 +204,6 @@ SDCachedStore subclass: SDFileStore [
 	 this must remain, do not want to rehash my databases and it is no big deal"
 
 	<category: 'queries'>
-	self flag: #knownBug.
 	^(anId inject: 0 into: [:sum :e | sum + e asInteger]) asReducedSumOfDigits 
 	    printString
     ]
