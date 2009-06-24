@@ -180,7 +180,6 @@ Object subclass: SDActiveRecord [
 
     initialize [
 	<category: 'initialize-release'>
-	super initialize.
 	id := UUID new.
 	createdOn := updatedOn := DateTime now.
 	version := 0.
