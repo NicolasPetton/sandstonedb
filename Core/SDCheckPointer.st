@@ -89,6 +89,9 @@ Object subclass: SDCheckPointer [
 		    allSubclassesDo: [:each | SDActiveRecord store ensureForClass: each].
 		SDActiveRecord allSubclassesDo: [:each | each warmUp]]] 
 		forkAt: Processor userBackgroundPriority + 1
-		named: 'loading sandstone'
     ]
+]
+
+Eval [
+    ObjectMemory addDependent: Sandstone.SDCheckPointer
 ]

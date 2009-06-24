@@ -76,8 +76,9 @@ SDCachedStore subclass: SDFileStore [
     ensureForClass: aClass [
 	<category: 'actions'>
 	| dir |
-	dir := (self dirForClass: aClass) createDirectory.
-	0 to: 9 do: [:num | (dir nameAt: num printString) createDirectory].
+	dir := (File name: (self dirForClass: aClass)) createDirectories.
+	0 to: 9 do: [:num | 
+	    (File name: (dir nameAt: num printString)) createDirectories].
 	cache at: aClass
 	    ifAbsentPut: 
 		[SDConcurrentDictionary on: (Dictionary new: self defaultCacheSize)]
@@ -188,14 +189,14 @@ SDCachedStore subclass: SDFileStore [
 		[lineage addFirst: parentClass.
 		parentClass := parentClass superclass].
 	^lineage inject: self defaultBaseDirectory
-	    into: [:dir :each | dir name: each name]
+	    into: [:dir :each | dir nameAt: each name]
     ]
 
     dirForClass: aClass atId: anId [
 	"Grab the correct hashed subdirectory for this record"
 
 	<category: 'queries'>
-	^(self dirForClass: aClass) name: (self dirNameFor: anId)
+	^(self dirForClass: aClass) nameAt: (self dirNameFor: anId)
     ]
 
     dirNameFor: anId [

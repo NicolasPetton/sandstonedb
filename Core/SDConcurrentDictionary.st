@@ -115,7 +115,6 @@ Object subclass: SDConcurrentDictionary [
 
     initialize [
 	<category: 'initialization'>
-	super initialize.
 	"I'm using a Monitor rather than a Semaphor here because I need to support
 	 reentrant operations by the same process, a Semaphor is too low level"
 	lock := RecursionLock new
