@@ -56,7 +56,6 @@ Object subclass: SDActiveRecord [
 	| locks |
 	
     Store := nil.
-
     ]
 
     SDActiveRecord class >> new [
