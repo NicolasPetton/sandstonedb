@@ -1,6 +1,6 @@
 Object extend [
     
-    sandStoneDeepCopy [
+    sandstoneDeepCopy [
 	<category: '*sandstonedb-serialization'>
     
 	"Replaces the receiver (sub) active records
