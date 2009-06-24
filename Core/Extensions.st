@@ -69,7 +69,7 @@ Object extend [
 		    [self
 			instVarNamed: name
 			put: var asReferenceMarker]
-		ifFalse: [var sandstoneMarkRefencesVisits: visitedParts]].
+		ifFalse: [var sandstoneMarkReferencesVisits: visitedParts]].
 	^self
     ]
 
