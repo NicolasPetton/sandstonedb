@@ -182,7 +182,7 @@ Object subclass: SDActiveRecord [
 	<category: 'initialize-release'>
 	super initialize.
 	id := UUID new.
-	createdOn := updatedOn := TimeStamp now.
+	createdOn := updatedOn := DateTime now.
 	version := 0.
 	isNew := true
     ]
@@ -366,14 +366,14 @@ Object subclass: SDActiveRecord [
 	"for overriding in subclasses to hook the objects lifecycle"
 	<category: 'events'>
 
-	createdOn := TimeStamp now
+	createdOn := DateTime now
     ]
 
     onBeforeSave [
 	"for overriding in subclasses to hook the objects lifecycle"
 	<category: 'events'>
 
-	updatedOn := TimeStamp now.
+	updatedOn := DateTime now.
 	version := version + 1.
 	isNew := false
     ]
