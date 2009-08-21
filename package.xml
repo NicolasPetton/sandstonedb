@@ -22,6 +22,7 @@
   <filein>Tests/SDChildMock.st</filein>
   <filein>Tests/SDManMock.st</filein>
 
+  <file>Core/SDCachedStore.st</file>
   <file>Core/SDError.st</file>
   <file>Tests/SDActiveRecordTests.st</file>
   <file>Store/SDFileStore.st</file>
@@ -34,7 +35,6 @@
   <file>Core/SDLoadError.st</file>
   <file>Core/SDAbstractStore.st</file>
   <file>Core/SDCommitError.st</file>
-  <file>Core/SDCachedStore.st</file>
   <file>Tests/SDMemoryStoreTests.st</file>
   <file>Tests/SDWomanMock.st</file>
   <file>Tests/SDChildMock.st</file>
