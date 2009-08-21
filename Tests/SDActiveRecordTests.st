@@ -77,7 +77,8 @@ TestCase subclass: SDActiveRecordTests [
 	SDPersonMock do: [:each | each delete].
 	SDPersonMock coolDown.
 	FooObject do: [:each | each delete].
-	SDPersonMock allSubclassesDo: [:each | each coolDown]
+	SDPersonMock allSubclassesDo: [:each | each coolDown].
+	Smalltalk garbageCollectMost
     ]
 
     testAbort [
@@ -96,7 +97,7 @@ TestCase subclass: SDActiveRecordTests [
 	mom children: {kid}.
 	mom save.
 	self flushAndReload.
-	self assert: mom refreshed children includes: kid refreshed
+	self assert: (mom refreshed children includes: kid refreshed)
     ]
 
     testAtIdSubclasses [
@@ -118,19 +119,22 @@ TestCase subclass: SDActiveRecordTests [
 	mom children: (Bag with: kid).
 	mom save.
 	self flushAndReload.
-	self assert: mom refreshed children includes: kid refreshed
+	self assert: (mom refreshed children includes: kid refreshed)
     ]
 
     testBigSave [
 	<category: 'running'>
-	| commitTime people deleteTime |
-	people := (1 to: 40) collect: [:it | SDPersonMock testPerson].
+	| commitTime people deleteTime lookTime |
+	people := (1 to: 50) collect: [:it | SDPersonMock testPerson].
 	commitTime := [people do: [:each | each save]] timeToRun milliSeconds.
 	deleteTime := [people do: [:each | each delete]] timeToRun milliSeconds.
 	Transcript
 	    show: commitTime;
 	    cr;
 	    show: deleteTime;
+	    cr;
+	    show lookupTime;
+	    cr;
 	    cr.
 	self assert: commitTime < 4 seconds.
 	self assert: deleteTime < 3 seconds
@@ -142,7 +146,7 @@ TestCase subclass: SDActiveRecordTests [
 	mom children: (OrderedCollection with: kid).
 	mom save.
 	self flushAndReload.
-	self assert: mom refreshed children includes: kid refreshed
+	self assert: (mom refreshed children includes: kid refreshed)
     ]
 
     testCreatedOn [
@@ -234,6 +238,36 @@ TestCase subclass: SDActiveRecordTests [
 	self assert: (SDPersonMock findAll: [:each | each id = 'not' ]) class = Array
     ]
 
+    testFindAllSubclasses [
+	<category: 'running'>
+	|man woman child grandchild |
+	man := SDManMock testPerson save.
+	woman := SDWomanMock testPerson save.
+	child := SDChildMock testPerson save.
+	grandchild := SDGrandChildMock testPerson save.
+	mom save.
+	self
+	    assert: 5
+	    equals: SDPersonMock findAll size.
+	self assert: (SDPersonMock findAll contains: [:e | e class = SDManMock]).
+	self
+	    assert: 1
+	    eqauals: SDManMock findAll size.
+	self
+	    assert: 3
+	    equals: SDChildMock findAll size.
+	self
+	    assert: 2
+	    equals: SDChildMock findAll size.
+	self
+	    assert: 1
+	    equals: SDGrandChildMock findAll size.
+	man delete.
+	woman delete.
+	child delete.
+	grandchild delete
+    ]
+
     testFindById [
 	<category: 'running'>
 	kid save.
@@ -254,13 +288,10 @@ TestCase subclass: SDActiveRecordTests [
 	woman := SDWomanMock testPerson save.
 	child := SDChildMock testPerson save.
 	grandchild := SDGrandChildMock testPerson save.
-	mom save.
-	self assert: 5 equals: SDPersonMock findAll size.
-	self assert: (SDPersonMock findAll contains: [:e | e class = SDManMock]).
-	self assert: 1 equals: SDManMock findAll size.
-	self assert: 3 equals: SDWomanMock findAll size.
-	self assert: 2 equals: SDChildMock findAll size.
-	self assert: 1 equals: SDGrandChildMock findAll size.
+	self assert: man = (SDPersonMock find: [:e | e id = man id]).
+	self assert: woman= (SDPersonMock find: [:e | e id = woman id]).
+	self assert: child = (SDPersonMock find: [:e | e id = child id]).
+	self assert: grandchild = (SDPersonMock find: [:e | e id = grandchild id]).
 	man delete.
 	woman delete.
 	child delete.
@@ -402,7 +433,7 @@ TestCase subclass: SDActiveRecordTests [
 	mom children: (Set with: kid).
 	mom save.
 	self flushAndReload.
-	self assert: mom refreshed children includes: kid refreshed
+	self assert: (mom refreshed children includes: kid refreshed)
     ]
 
     testUpdatedOn [
