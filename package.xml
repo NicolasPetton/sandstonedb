@@ -1,5 +1,6 @@
 <package>
 
+  <filein>Core/SDAbstractStore.st</filein>
   <filein>Core/SDCachedStore.st</filein>
   <filein>Store/SDFileStore.st</filein>
   <filein>Store/SDMemoryStore.st</filein>
@@ -10,7 +11,6 @@
   <filein>Core/SDActiveRecord.st</filein>
   <filein>Core/SDError.st</filein>
   <filein>Core/SDLoadError.st</filein>
-  <filein>Core/SDAbstractStore.st</filein>
   <filein>Core/SDCommitError.st</filein>
   <filein>Tests/SDMemoryStoreTests.st</filein>
   <filein>Tests/SDGrandChildMock.st</filein>
@@ -22,6 +22,7 @@
   <filein>Tests/SDChildMock.st</filein>
   <filein>Tests/SDManMock.st</filein>
 
+  <file>Core/SDAbstractStore.st</file>
   <file>Core/SDCachedStore.st</file>
   <file>Core/SDError.st</file>
   <file>Tests/SDActiveRecordTests.st</file>
@@ -33,7 +34,6 @@
   <file>Core/SDCheckPointer.st</file>
   <file>Core/SDActiveRecord.st</file>
   <file>Core/SDLoadError.st</file>
-  <file>Core/SDAbstractStore.st</file>
   <file>Core/SDCommitError.st</file>
   <file>Tests/SDMemoryStoreTests.st</file>
   <file>Tests/SDWomanMock.st</file>
