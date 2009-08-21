@@ -46,7 +46,7 @@ SDActiveRecord subclass: SDPersonMock [
     SDPersonMock class >> testPerson [
 	^(self new)
 	    name: 'mzqfmmv zptnhli';
-	    dateOfBirth: Date today - 12000 atRandom days;
+	    dateOfBirth: Date today;
 	    description: 'Rxvalpv tdpqkvv ikjcscw bigjmeb vukntxj qxshdtt wkczzio bqpqacu whluhqv.  Lqlwajh!  Qknwpfd peeskqc oarthtv pfblwjj yndlxks.  .  Ucnlocq iuiiluk txkkzmh dshkhmq uokcwqy oiktkxl awxmpep rkkcmis xcgyoeg jodtjaf ntwijzp?  Bqpjsiq qthzwtx xcnqbag ausurqp xatoqar jytguon?  Bpigdij jgijxep bjgttpr kklsfaw rdoikwz!  Hzdbjxc?  Ehwflyy qfcqntk mlhcjql ecbtrtk egxldpk rypalvw ndngbdl jhhdxts zrfjtaz gccrnni dwuqxwm nmifzcq sxkgkxh.  Kwtzsjv ghvjqqm lfgibdt rufcowp kavabmi bpveqsr shjzsft xqaxivy fjqydns ryyggif.
 
 Jshooyy jsyojlv miusnaj onpdiss hypkzzd qaunpqd rrvgnws ekiswyv?  Glhxkkk?  Pzyjuot raaefbv cnxmbsd?  Jabaniw uirjkcm jocxnhd!  Erwblox qikxfez.
