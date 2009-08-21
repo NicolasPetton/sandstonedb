@@ -1,4 +1,6 @@
 <package>
+  <name>Sandstone</name>	
+  <namespace>Sandstone</namespace>	
 
   <filein>Core/SDAbstractStore.st</filein>
   <filein>Core/SDCachedStore.st</filein>
