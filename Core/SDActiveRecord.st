@@ -60,7 +60,7 @@ Object subclass: SDActiveRecord [
 
     SDActiveRecord class >> new [
 	<category: 'instance creation'>
-	^self basicNew initialize
+	^self basicNew "initialize"
     ]
 
     SDActiveRecord class >> atId: anId [
@@ -134,6 +134,11 @@ Object subclass: SDActiveRecord [
 	self ensureReady
     ]
 
+    SDActiveRecord class >> resetForLoad [
+	<category: 'actions'>
+	self setStore: self store class new
+    ]
+
     SDActiveRecord class >> warmUp [
 	<category: 'actions'>
 	| loadTime |
@@ -144,6 +149,12 @@ Object subclass: SDActiveRecord [
 	Transcript
 	    show: self name , ' loaded in ' , loadTime printString;
 	    cr
+    ]
+
+    SDActiveRecord class >> warmUpAllClasses [
+	<categroy: 'actions'>
+	self allSubClassesDo: [:each | self store ensureForClass: each].
+	self allSubclassesDo: [:each | each warmUp]
     ]
 
     SDActiveRecord class >> defaultStore [
@@ -157,6 +168,21 @@ Object subclass: SDActiveRecord [
 	    ifNil: [locks := SDConcurrentDictionary on: (WeakKeyDictionary new: 10000)]
     ]
 
+    SDActiveRecord class >> defaultDictionary [
+	<categroy: 'defaults'>
+	^Dictionary
+    ]
+   
+    SDActiveRecord class >> defaultHashSize [
+	<category: 'defaults'>
+	^100
+    ]
+
+    SDActiveRecord class >> defaultIdentityDictionary [
+	<category: 'defaults'>
+	^IdentityDictionary
+    ]
+    
     SDActiveRecord class >> initialize [
 	<category: 'initialization'>
 	Store := self defaultStore
