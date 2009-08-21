@@ -78,18 +78,15 @@ Object subclass: SDCheckPointer [
 	    ifNil: [SDActiveRecord setStore: SDActiveRecord defaultStore]
 	    ifNotNil: 
 		[isStarting 
-		    ifTrue: [SDActiveRecord setStore: SDActiveRecord store class new]].
+		    ifTrue: [SDActiveRecord resetStoreForLoad]].
 
 	"Load records on a priority just higher than Seaside so db is loaded
 	before requests start coming in, don't want users seeing missing data."
 	
 	[isStarting 
-	    ifTrue: 
-		[SDActiveRecord 
-		    allSubclassesDo: [:each | SDActiveRecord store ensureForClass: each].
-		SDActiveRecord allSubclassesDo: [:each | each warmUp]]] 
-		forkAt: Processor userBackgroundPriority + 1
-    ]
+	    ifTrue: [SDActiveRecord warmUpAllClasses]] 
+	    forkAt: Processor userBackgroundPriority + 1
+    ]	    named: 'Loading sandstone'
 ]
 
 Eval [
