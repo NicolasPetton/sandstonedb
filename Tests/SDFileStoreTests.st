@@ -105,6 +105,24 @@ SDActiveRecordTests subclass: SDFileStoreTests [
 	self should: [store loadClass: kid class atId: kid id] raise: SDLoadError
     ]
 
+    testLoadTime [
+	<category: 'running'>
+	| commitTime people lookupTime loadTime |
+	people := (1 to: 100) collect: [:it | SDPersonMock testPerson].
+	commitTime := [people do: [:each | each save]] timeToRun milliSeconds.
+	lookupTime := [people do: [:each | SDPersonMock atId: each id]] timeToRun milliSeconds.
+	loadTime :=
+	[SDActiveRecord resetStoreForLoad.
+	SDActiveRecord warmUpAllClasses] timeToRun milliSeconds.
+	Transcript
+	    show: commitTime;
+	    cr;
+	    show: loadTime;
+	    cr;
+	    cr.
+	self assert: commitTime < 4 seconds
+    ]
+
     testSaveMissingFile [
 	<category: 'running'>
 	self assert: kid isNew.
