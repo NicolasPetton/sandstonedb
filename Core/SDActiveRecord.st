@@ -146,9 +146,9 @@ Object subclass: SDActiveRecord [
 	    Store ensureForClass: self.
 	    self ensureReady.
 	    Store recoverForClass: self].
-	Transcript
+	"Transcript
 	    show: self name , ' loaded in ' , loadTime printString;
-	    cr
+	    cr"
     ]
 
     SDActiveRecord class >> warmUpAllClasses [
@@ -158,7 +158,7 @@ Object subclass: SDActiveRecord [
     ]
 
     SDActiveRecord class >> defaultStore [
-	<category: 'accessing defaults'>
+	<category: 'defaults'>
 	^SDFileStore new
     ]
 
