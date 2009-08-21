@@ -274,7 +274,7 @@ SDCachedStore subclass: SDFileStore [
     initializeCache [
 	<category: 'initialization'>
 	cache := SDConcurrentDictionary 
-		    on: (Dictionary new: self defaultCacheSize)
+		    on: (SDActiveRecord defaultDictionary new: self defaultCacheSize)
     ]
 ]
 
