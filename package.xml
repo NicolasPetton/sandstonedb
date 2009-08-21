@@ -8,10 +8,10 @@
   <filein>Core/UUID.st</filein>
   <filein>Core/SDCheckPointer.st</filein>
   <filein>Core/SDActiveRecord.st</filein>
+  <filein>Core/SDError.st</filein>
   <filein>Core/SDLoadError.st</filein>
   <filein>Core/SDAbstractStore.st</filein>
   <filein>Core/SDCommitError.st</filein>
-  <filein>Core/SDError.st</filein>
   <filein>Tests/SDMemoryStoreTests.st</filein>
   <filein>Tests/SDGrandChildMock.st</filein>
   <filein>Tests/SDActiveRecordTests.st</filein>
