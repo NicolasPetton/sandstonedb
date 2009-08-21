@@ -5,7 +5,7 @@ Object extend [
     
 	"Replaces the receiver (sub) active records
 	with Sandstone references where it is needed"
-	^self sandstoneDeepCopyVisits: (ActiveRecord defaultIdentityDictionary new: ActiveRecord defaultHashSize)
+	^self sandstoneDeepCopyVisits: (SDActiveRecord defaultIdentityDictionary new: SDActiveRecord defaultHashSize)
     ]
 
     sandstoneDeepCopyVisits: visitedParts [
@@ -43,7 +43,7 @@ Object extend [
 
 	"Replaces the receiver (sub) active records
 	with Sandstone references where it is needed"
-	^self sandstoneMarkReferencesVisits: (ActiveRecord defaultIdentityDictionary new: ActiveRecord defaultHashSize)
+	^self sandstoneMarkReferencesVisits: (SDActiveRecord defaultIdentityDictionary new: SDActiveRecord defaultHashSize)
     ]
 
     sandstoneMarkReferencesVisits: visitedParts [
@@ -72,7 +72,7 @@ Object extend [
 	<category: '*sandstonedb-serialization'>
 	"Replaces the receiver markers with
 	active records where it is needed"
-	^self sandstoneResolveReferencesVisits: (ActiveRecord defaultIdentityDictionary new: self ActiveRecord defaultHashSize)
+	^self sandstoneResolveReferencesVisits: (SDActiveRecord defaultIdentityDictionary new: self SDActiveRecord defaultHashSize)
     ]
 
     sandstoneResolveReferencesVisits: visitedParts [
