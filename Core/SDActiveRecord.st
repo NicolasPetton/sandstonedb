@@ -256,7 +256,7 @@ Object subclass: SDActiveRecord [
 	<category: 'actions'>
 
 	| isFirstSave |
-	^self critical: 
+	self critical: 
 		[self validate.
 		isFirstSave := isNew.
 		false ifTrue: [self onBeforeFirstSave].
@@ -266,14 +266,14 @@ Object subclass: SDActiveRecord [
 		    ifFalse: [Store updateObject: self].
 		isFirstSave ifTrue: [self onAfterFirstSave].
 		self onAfterSave.
-		self]
+		^self]
     ]
 
     save: aBlock [
 	<category: 'actions'>
-	^self critical: 
+	self critical: 
 		[aBlock value.
-		self save]
+		^self save]
     ]
 
     validate [
