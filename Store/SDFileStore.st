@@ -188,7 +188,7 @@ SDCachedStore subclass: SDFileStore [
 		[lineage addFirst: parentClass.
 		parentClass := parentClass superclass].
 	^File name: (lineage inject: self defaultBaseDirectory
-	    into: [:dir :each | dir nameAt: each name])
+	    into: [:dir :each | File name: (dir nameAt: each name asString)])
     ]
 
     dirForClass: aClass atId: anId [
