@@ -153,7 +153,7 @@ TestCase subclass: SDActiveRecordTest [
     testCreatedOn [
 	<category: 'running'>
 	kid save.
-	self assert: kid createdOn <= TimeStamp now
+	self assert: kid createdOn <= DateTime now
     ]
 
     testDeepCopy [
@@ -440,7 +440,7 @@ TestCase subclass: SDActiveRecordTest [
     testUpdatedOn [
 	<category: 'running'>
 	kid save.
-	self assert: kid updatedOn <= TimeStamp now
+	self assert: kid updatedOn <= DateTime now
     ]
 
     testVersion [
