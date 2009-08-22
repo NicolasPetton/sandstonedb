@@ -426,7 +426,15 @@ SequenceableCollection extend [
 ]
 
 Set extend [
-    
+
+    doWithIndex: aBlock [
+	<category: 'enumerating'>
+	"Support Set enumeration with a counter, even though not ordered"
+	| index |
+	index := 0.
+	self do: [:item | aBlock value: item value: (index := index+1)]
+    ]
+
     sandstoneResolveReferencesVisits: visitedParts [
 	<category: '*sandstonedb'>
 	
