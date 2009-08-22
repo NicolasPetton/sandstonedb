@@ -148,7 +148,7 @@ Collection extend [
 	visitedParts at: self put: self.
 	self copy do: [:each |
 	    each isSandstoneActiveRecord
-		ifTrue: [ self remove: each; each; add: each asReferenceMarker ]
+		ifTrue: [ self remove: each; add: each asReferenceMarker ]
 		ifFalse: [ each sandstoneMarkReferencesVisits: visitedParts ]].
 	^self
     ]
