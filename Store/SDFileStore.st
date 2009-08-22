@@ -86,10 +86,14 @@ SDCachedStore subclass: SDFileStore [
 
     loadClass: aClass atId: anId [
 	<category: 'actions'>
-	^[(ObjectDumper on: ((self dirForClass: aClass atId: anId) 
-	    fullNameFor: anId , '.obj')) load] 
-		on: Error
-		do: [:err | SDLoadError signal: err messageText]
+	| file stream obj |
+	file := (self dirForClass: aClass atId: anId) at: anId, '.obj'.
+	stream := FileStream open: file name mode: FileStream read.
+	[obj := (ObjectDumper on: stream) load] 
+	    on: Error
+	    do: [:err | SDLoadError signal: err messageText].
+	stream close.
+	^obj
     ]
 
     recoverForClass: aClass [
@@ -158,14 +162,12 @@ SDCachedStore subclass: SDFileStore [
 	^(cache at: aClass) at: anId
 	    ifAbsent: 
 		[([self loadClass: aClass atId: anId] on: SDLoadError do: [nil]) 
-		    ifNotNilDo: 
-			[:it | 
+		    ifNotNil: [:it | 
 			"seems I have to make sure to cache the object before I can resolve
 			 it's references so any backreferences to it don't try and load from
 			 disk again''"
-
 			(cache at: aClass) at: anId put: it.
-			it sandstoneResolveReferences]]
+			it "sandstoneResolveReferences"]]
     ]
 
     dirForClass: aClass [
@@ -211,8 +213,10 @@ SDCachedStore subclass: SDFileStore [
 	 doesn't need concurrency protection, just a naked dictionary''"
 
 	<category: 'queries'>
-	^aClass allSubclasses inject: (cache at: aClass) dictionary
-	    into: [:sum :subclass | sum , (cache at: subclass) dictionary]
+	^aClass allSubclasses 
+	    inject: (cache at: aClass) dictionary
+	    into: [:sum :subclass | 
+		sum addAll: (cache at: subclass) dictionary. sum]
     ]
 
     defaultBaseDirectory [
@@ -250,17 +254,18 @@ SDCachedStore subclass: SDFileStore [
     loadChangesForClass: aClass [
 	<category: 'crash recovery'>
 	| id obj |
-	(self dirForClass: aClass) all namesDo: [:each |
+	(self dirForClass: aClass) all do: [:each |
 	    "there could be tens of thousands of entries, so using do with
 	    a condition to avoid the copy a select would generate"
-	    [(File name: ((self dirForClass: aClass) nameAt: each)) isDirectory ifFalse: [
-		id := each copyUpTo: $..
-		obj := (cache at: aClass) at: id ifAbsent: [nil].
+	    [each isDirectory ifFalse: [
+		id := each stripPath copyUpTo: $..
+		obj := (cache at: aClass) 
+		    at: id 
+		    ifAbsent: [nil].
 		obj ifNil: [self cachedLoadOfClass: aClass from: id]
 		    ifNotNil: [obj abortChanges]]] 
 			on: Error
 			do: [:err | Transcript show: err; cr]]
-			. 'coucou' printNl
     ]
 
     initialize [

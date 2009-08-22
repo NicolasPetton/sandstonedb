@@ -43,7 +43,9 @@ Object extend [
 
 	"Replaces the receiver (sub) active records
 	with Sandstone references where it is needed"
-	^self sandstoneMarkReferencesVisits: (SDActiveRecord defaultIdentityDictionary new: SDActiveRecord defaultHashSize)
+	^self sandstoneMarkReferencesVisits: 
+	    (SDActiveRecord defaultIdentityDictionary new: 
+		SDActiveRecord defaultHashSize)
     ]
 
     sandstoneMarkReferencesVisits: visitedParts [
@@ -72,7 +74,7 @@ Object extend [
 	<category: '*sandstonedb-serialization'>
 	"Replaces the receiver markers with
 	active records where it is needed"
-	^self sandstoneResolveReferencesVisits: (SDActiveRecord defaultIdentityDictionary new: self SDActiveRecord defaultHashSize)
+	^self sandstoneResolveReferencesVisits: (IdentityDictionary new: self sandstoneInitialHashSize)
     ]
 
     sandstoneResolveReferencesVisits: visitedParts [
@@ -84,17 +86,22 @@ Object extend [
 	self deservesSandstoneReferenceMark ifFalse: [^self].
 	visitedParts at: self ifPresent: [:it | ^ it ].
 	visitedParts at: self put: self.
-	self class allInsVarNames do:
+	self class allInstVarNames do:
 	    [:name |
 	    | var |
 	    var := self instVarNamed: name.
-	    (var isSandStoneMarker)
+	    (var isSandstoneMarker)
 		ifTrue:
 		    [ self
 			instVarNamed: name
 			put: var asOriginalObject ]
 		ifFalse: [var sandstoneResolveReferencesVisits: visitedParts ]].
 	^self
+    ]
+    
+    sandstoneInitialHashSize [
+	<category: '*sandstonedb'>
+	^ 10000
     ]
 
     deservesSandstoneReferenceMark [
@@ -190,7 +197,7 @@ Boolean extend [
 	^self
     ]
 
-    sandstoneDeepCopyVisits [
+    sandstoneDeepCopyVisits: visitedParts [
 	<category: '*sandstonedb'>
 	^self
     ]

@@ -70,17 +70,17 @@ Object subclass: SDConcurrentDictionary [
 
     at: aKey ifAbsent: aBlock [
 	<category: 'accessing'>
-	^lock critical: [dictionary at: aKey ifAbsent: aBlock]
+	lock critical: [^dictionary at: aKey ifAbsent: aBlock]
     ]
 
     at: aKey ifAbsentPut: aBlock [
 	<category: 'accessing'>
-	^lock critical: [dictionary at: aKey ifAbsentPut: aBlock]
+	lock critical: [^dictionary at: aKey ifAbsentPut: aBlock]
     ]
 
     at: aKey put: aValue [
 	<category: 'accessing'>
-	^lock critical: [dictionary at: aKey put: aValue]
+	lock critical: [^dictionary at: aKey put: aValue]
     ]
 
     dictionary [
