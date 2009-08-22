@@ -86,7 +86,8 @@ Object subclass: SDCheckPointer [
 	[isStarting 
 	    ifTrue: [SDActiveRecord warmUpAllClasses]] 
 	    forkAt: Processor userBackgroundPriority + 1
-    ]	    named: 'Loading sandstone'
+    	    named: 'Loading sandstone'
+    ]
 ]
 
 Eval [

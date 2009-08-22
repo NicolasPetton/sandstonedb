@@ -51,8 +51,7 @@ SDCachedStore subclass: SDMemoryStore [
 	"self initialize"
 	<category: 'initialization'>
 
-	Cache := SDActiveRecord defaultDictionary new.
-	cache := SDActiveRecord defaultDictionary new
+	Cache := Dictionary new.
     ]
 
      SDMemoryStore class >> new [
@@ -107,8 +106,8 @@ SDCachedStore subclass: SDMemoryStore [
     initialize [
 	<category: 'actions'>
 	super initialize.
-	Cache := Dictionary new.
-	cache := Dictionary new
+	Cache := SDActiveRecord defaultDictionary new.
+	cache := SDActiveRecord defaultDictionary new.
     ]
 
     loadClass: aClass atId: anId [
