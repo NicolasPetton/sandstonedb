@@ -123,7 +123,7 @@ SDCachedStore subclass: SDMemoryStore [
     removeCachedOfClass: aClass from: anId [
 	<category: 'actions'>
 	^(cache at: aClass) removeKey: anId
-	    ifAbsent: [SDError signal: 'Deleted or new objects cannot be aborted']
+	    ifAbsent: ["SDError signal: 'Deleted or new objects cannot be aborted'" nil]
     ]
 
     removeObject: anObject [

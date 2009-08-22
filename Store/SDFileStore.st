@@ -55,7 +55,7 @@ SDCachedStore subclass: SDFileStore [
 			    addCachedOfClass: anObject class
 			    at: anObject id
 			    put: anObject]
-		    ifNotNil: [anObject becomeForward: diskVersion]]
+		    ifNotNil: [anObject become: diskVersion]]
     ]
 
     addCachedOfClass: aClass at: anId put: anObject [
@@ -116,7 +116,7 @@ SDCachedStore subclass: SDFileStore [
 	| dir |
 	self removeCachedOfClass: anObject class from: anObject id.
 	dir := self dirForClass: anObject class atId: anObject id.
-	(dir at: anObject id , '.obj') remove.
+	"(dir at: anObject id , '.obj') remove."
 	"kill any other versions or failed commits of this object"
 	dir 
 	    allFilesMatching: anObject id , '.*'

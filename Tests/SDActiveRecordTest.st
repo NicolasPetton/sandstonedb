@@ -126,19 +126,19 @@ TestCase subclass: SDActiveRecordTest [
 	<category: 'running'>
 	| commitTime people deleteTime lookupTime |
 	people := (1 to: 50) collect: [:it | SDPersonMock testPerson].
-	commitTime := [people do: [:each | each save]] timeToRun milliSeconds.
-	lookupTime := [people do: [:each | SDPersonMock atId: each id]] timeToRun milliSeconds.
-	deleteTime := [people do: [:each | each delete]] timeToRun milliSeconds.
+	commitTime := Time millisecondsToRun: [people do: [:each | each save]].
+	lookupTime := Time millisecondsToRun: [people do: [:each | SDPersonMock atId: each id]].
+	deleteTime := Time millisecondsToRun: [people do: [:each | each delete]].
 	Transcript
-	    show: commitTime;
+	    show: commitTime printString;
 	    cr;
-	    show: deleteTime;
+	    show: deleteTime printString;
 	    cr;
-	    show: lookupTime;
+	    show: lookupTime printString;
 	    cr;
 	    cr.
-	self assert: commitTime < 4 seconds.
-	self assert: deleteTime < 3 seconds
+	self assert: commitTime < (4*1000) "seconds".
+	self assert: deleteTime < (3*1000) "seconds"
     ]
 
     testCollectionSerialization [
@@ -253,7 +253,7 @@ TestCase subclass: SDActiveRecordTest [
 	self assert: (SDPersonMock findAll contains: [:e | e class = SDManMock]).
 	self
 	    assert: 1
-	    eqauals: SDManMock findAll size.
+	    equals: SDManMock findAll size.
 	self
 	    assert: 3
 	    equals: SDChildMock findAll size.
