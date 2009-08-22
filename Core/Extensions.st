@@ -455,9 +455,9 @@ String extend [
 	^self shallowCopy
     ]
 
-    sandstoneDeepCopy [
+    sandstoneDeepCopyVisits: visitedParts [
 	<category: '*sandstonedb-serialization'>
-	^self shalloxCopy
+	^self shallowCopy
     ]
 
     sandstoneMarkReferencesVisits: visitedParts [
