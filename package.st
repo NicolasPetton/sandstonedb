@@ -4,12 +4,12 @@ Eval [
     namespace: 'Sandstone';
     prereq: 'SUnit';
     testsBelow: 'Tests' matching: '*.st';
+    filein: 'Core/Extensions.st';
     filein: 'Core/SDAbstractStore.st';
     filein: 'Core/SDCachedStore.st';
     filein: 'Store/SDFileStore.st';
     filein: 'Store/SDMemoryStore.st';
     filein: 'Core/SDConcurrentDictionary.st';
-    filein: 'Core/Extensions.st';
     filein: 'Core/UUID.st';
     filein: 'Core/SDCheckPointer.st';
     filein: 'Core/SDActiveRecord.st';
@@ -18,6 +18,7 @@ Eval [
     filein: 'Core/SDCommitError.st';
 
 
+    filein: 'Tests/Extensions.st';
     filein: 'Tests/SDPersonMock.st';
     filein: 'Tests/SDManMock.st';
     filein: 'Tests/SDWomanMock.st';

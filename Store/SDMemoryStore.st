@@ -153,7 +153,7 @@ SDCachedStore subclass: SDMemoryStore [
 
 	<category: 'queries'>
 	^aClass allSubclasses inject: (cache at: aClass)
-	    into: [:sum :subclass | sum , (cache at: subclass)]
+	    into: [:sum :subclass | sum addAll: (cache at: subclass). sum]
     ]
 ]
 

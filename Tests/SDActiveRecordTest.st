@@ -78,7 +78,7 @@ TestCase subclass: SDActiveRecordTest [
 	SDPersonMock coolDown.
 	FooObject do: [:each | each delete].
 	SDPersonMock allSubclassesDo: [:each | each coolDown].
-	Smalltalk garbageCollectMost
+	ObjectMemory compact
     ]
 
     testAbort [
