@@ -120,7 +120,7 @@ Object extend [
 
 Collection extend [
     
-    sandstoneDeepCopyVisits: visitedParts[
+    sandstoneDeepCopyVisits: visitedParts [
 	<category: '*sandstonedb'>
     
 	"sandstoneDeepCopy works just like deepCopy until it hits another active record
@@ -224,7 +224,6 @@ Bag extend [
 
 	self class isMeta ifTrue: [^self].
 	self deservesSandstoneReferenceMark ifFalse: [^self].
-	self deservesSandstoneReferenceMark ifFalse: [:it | ^self].
 	visitedParts at: self ifPresent: [:it | ^self].
 	visitedParts at: self put: self.
 	self valuesAndCounts sandstoneMarkReferencesVisits: visitedParts.
