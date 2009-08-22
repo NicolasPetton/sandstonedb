@@ -24,9 +24,9 @@ Eval [
     filein: 'Tests/SDChildMock.st';
     filein: 'Tests/SDGrandChildMock.st';
     filein: 'Tests/FooObject.st';
-    filein: 'Tests/SDActiveRecordTests.st';
-    filein: 'Tests/SDMemoryStoreTests.st';
-    filein: 'Tests/SDFileStoreTests.st';
+    filein: 'Tests/SDActiveRecordTest.st';
+    filein: 'Tests/SDMemoryStoreTest.st';
+    filein: 'Tests/SDFileStoreTest.st';
 
     buildXml
 ]
