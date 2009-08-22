@@ -134,7 +134,7 @@ Object subclass: SDActiveRecord [
 	self ensureReady
     ]
 
-    SDActiveRecord class >> resetForLoad [
+    SDActiveRecord class >> resetStoreForLoad [
 	<category: 'actions'>
 	self setStore: self store class new
     ]
