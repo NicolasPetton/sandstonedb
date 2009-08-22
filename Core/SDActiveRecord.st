@@ -307,6 +307,7 @@ Object subclass: SDActiveRecord [
 	^(SDRecordMarker new)
 	    id: id;
 	    className: self class name;
+	    environment: self class environment;
 	    yourself
     ]
 

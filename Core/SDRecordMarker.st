@@ -39,7 +39,7 @@
 
 
 Object subclass: SDRecordMarker [
-    | id className |
+    | id className environment |
     
     <category: 'SandstoneDb-Core'>
     <comment: 'I exist to mark a reference to another object in
@@ -55,14 +55,14 @@ Object subclass: SDRecordMarker [
 
 	<category: 'converting'>
 	| origClass |
-	origClass := Smalltalk at: className.
+	origClass := environment at: className.
 	"I'm checking inheritsFrom: here so that any classes that used to be
 	 activeRecords but aren't anymore that had serialized instances are
 	 caught and return nil when resolved rather than blow up.  This happens
 	 often during development when you're changing your model a lot"
 	^(origClass inheritsFrom: SDActiveRecord) 
 	    ifTrue: 
-		[SDActiveRecord store cachedLoadOfClass: (Smalltalk at: className) from: id]
+		[SDActiveRecord store cachedLoadOfClass: (environment at: className) from: id]
 	    ifFalse: [nil]
     ]
 
@@ -74,6 +74,16 @@ Object subclass: SDRecordMarker [
     className: anObject [
 	<category: 'accessing'>
 	className := anObject
+    ]
+
+    environment [
+	<category: 'accessing'>
+	^environment
+    ]
+
+    environment: anObject [
+	<category: 'accessing'>
+	environment := anObject
     ]
 
     id [
