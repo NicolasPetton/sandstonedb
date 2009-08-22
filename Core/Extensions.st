@@ -178,11 +178,6 @@ Array extend [
 	<category: '*sandstonedb'>
 	^ {Array. DependentsArray. WeakArray } includes: self class
     ]
-    
-    deserveSandstoneReferenceMark [
-	<category: '*sandstonedb'>
-	^false
-    ]
 ]
 
 Boolean extend [
