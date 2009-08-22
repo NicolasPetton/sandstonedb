@@ -259,7 +259,7 @@ Object subclass: SDActiveRecord [
 	self critical: 
 		[self validate.
 		isFirstSave := isNew.
-		false ifTrue: [self onBeforeFirstSave].
+		isFirstSave ifTrue: [self onBeforeFirstSave].
 		self onBeforeSave.
 		isFirstSave 
 		    ifTrue: [Store storeObject: self]
