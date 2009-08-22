@@ -124,16 +124,17 @@ TestCase subclass: SDActiveRecordTests [
 
     testBigSave [
 	<category: 'running'>
-	| commitTime people deleteTime lookTime |
+	| commitTime people deleteTime lookupTime |
 	people := (1 to: 50) collect: [:it | SDPersonMock testPerson].
 	commitTime := [people do: [:each | each save]] timeToRun milliSeconds.
+	lookupTime := [people do: [:each | SDPersonMock atId: each id]] timeToRun milliSeconds.
 	deleteTime := [people do: [:each | each delete]] timeToRun milliSeconds.
 	Transcript
 	    show: commitTime;
 	    cr;
 	    show: deleteTime;
 	    cr;
-	    show lookupTime;
+	    show: lookupTime;
 	    cr;
 	    cr.
 	self assert: commitTime < 4 seconds.

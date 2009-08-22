@@ -2,6 +2,7 @@ Eval [
   PackageBuilder new
     name: 'Sandstone';
     namespace: 'Sandtone';
+    prereq: 'SUnit';
     testsBelow: 'Tests' matching: '*.st';
     filein: 'Core/SDAbstractStore.st';
     filein: 'Core/SDCachedStore.st';
@@ -16,17 +17,17 @@ Eval [
     filein: 'Core/SDLoadError.st';
     filein: 'Core/SDCommitError.st';
 
-"
-    filein: 'Tests/SDMemoryStoreTests.st';
-    filein: 'Tests/SDGrandChildMock.st';
-    filein: 'Tests/SDActiveRecordTests.st';
-    filein: 'Tests/SDWomanMock.st';
+
     filein: 'Tests/SDPersonMock.st';
-    filein: 'Tests/SDFileStoreTests.st';
-    filein: 'Tests/FooObject.st';
-    filein: 'Tests/SDChildMock.st';
     filein: 'Tests/SDManMock.st';
-"
+    filein: 'Tests/SDWomanMock.st';
+    filein: 'Tests/SDChildMock.st';
+    filein: 'Tests/SDGrandChildMock.st';
+    filein: 'Tests/FooObject.st';
+    filein: 'Tests/SDActiveRecordTests.st';
+    filein: 'Tests/SDMemoryStoreTests.st';
+    filein: 'Tests/SDFileStoreTests.st';
+
     buildXml
 ]
 
