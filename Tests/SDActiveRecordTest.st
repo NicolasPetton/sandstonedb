@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDActiveRecordTests class definition
+|   Sandstone.SDActiveRecordTest class definition
 |
  ======================================================================"
 
@@ -37,14 +37,14 @@
 
 
 
-TestCase subclass: SDActiveRecordTests [
+TestCase subclass: SDActiveRecordTest [
     | mom kid store |
     
     <comment: 'Part of the reason I did this project was to force myself to
     learn to do more unit testing.  I''m starting to learn to like it.'>
     <category: 'SandstoneDb-Tests'>
 
-    SDActiveRecordTests class >> isAbstract [
+    SDActiveRecordTest class >> isAbstract [
 	<category: 'testing'>
 	^true
     ]

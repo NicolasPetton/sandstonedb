@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDFileStoreTests class definition
+|   Sandstone.SDFileStoreTest class definition
 |
  ======================================================================"
 
@@ -37,12 +37,12 @@
 
 
 
-SDActiveRecordTests subclass: SDFileStoreTests [
+SDActiveRecordTests subclass: SDFileStoreTest [
     
     <comment: nil>
     <category: 'SandstoneDb-Tests'>
 
-    SDFileStoreTests class >> isAbstract [
+    SDFileStoreTest class >> isAbstract [
 	<category: 'testing'>
 	^false
     ]
