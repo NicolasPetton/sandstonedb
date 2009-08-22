@@ -74,7 +74,7 @@ Object extend [
 	<category: '*sandstonedb-serialization'>
 	"Replaces the receiver markers with
 	active records where it is needed"
-	^self sandstoneResolveReferencesVisits: (IdentityDictionary new: self sandstoneInitialHashSize)
+	^self sandstoneResolveReferencesVisits: (SDActiveRecord defaultIdentityDictionary new: SDActiveRecord defaultHashSize)
     ]
 
     sandstoneResolveReferencesVisits: visitedParts [
@@ -99,11 +99,6 @@ Object extend [
 	^self
     ]
     
-    sandstoneInitialHashSize [
-	<category: '*sandstonedb'>
-	^ 10000
-    ]
-
     deservesSandstoneReferenceMark [
 	<category: '*sandstonedb-testing'>
 	^true
