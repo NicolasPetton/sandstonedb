@@ -37,7 +37,7 @@
 
 
 
-SDActiveRecordTests subclass: SDMemoryStoreTest [
+SDActiveRecordTest subclass: SDMemoryStoreTest [
     
     <comment: nil>
     <category: 'SandstoneDb-Tests'>

@@ -37,7 +37,7 @@
 
 
 
-SDActiveRecordTests subclass: SDFileStoreTest [
+SDActiveRecordTest subclass: SDFileStoreTest [
     
     <comment: nil>
     <category: 'SandstoneDb-Tests'>

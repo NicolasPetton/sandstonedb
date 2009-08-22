@@ -1,7 +1,7 @@
 Eval [
   PackageBuilder new
     name: 'Sandstone';
-    namespace: 'Sandtone';
+    namespace: 'Sandstone';
     prereq: 'SUnit';
     testsBelow: 'Tests' matching: '*.st';
     filein: 'Core/SDAbstractStore.st';

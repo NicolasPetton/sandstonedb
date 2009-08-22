@@ -153,7 +153,7 @@ Object subclass: SDActiveRecord [
 
     SDActiveRecord class >> warmUpAllClasses [
 	<categroy: 'actions'>
-	self allSubClassesDo: [:each | self store ensureForClass: each].
+	self allSubclassesDo: [:each | self store ensureForClass: each].
 	self allSubclassesDo: [:each | each warmUp]
     ]
 
