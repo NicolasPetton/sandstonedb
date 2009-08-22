@@ -5,6 +5,7 @@ Eval [
     prereq: 'SUnit';
     testsBelow: 'Tests' matching: '*.st';
     filein: 'Core/Extensions.st';
+    filein: 'Core/SDRecordMarker.st';
     filein: 'Core/SDAbstractStore.st';
     filein: 'Core/SDCachedStore.st';
     filein: 'Store/SDFileStore.st';
