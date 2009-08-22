@@ -112,10 +112,11 @@ SDCachedStore subclass: SDFileStore [
 	| dir |
 	self removeCachedOfClass: anObject class from: anObject id.
 	dir := self dirForClass: anObject class atId: anObject id.
-	dir remove: anObject id , '.obj'.
+	(dir at: anObject id , '.obj') remove.
 	"kill any other versions or failed commits of this object"
-	(dir allFilesMatching: anObject id , '.*') 
-	    do: [:e | dir remove: e]
+	dir 
+	    allFilesMatching: anObject id , '.*'
+	    do: [:each | each remove]
     ]
 
     storeObject: origObject [
@@ -123,31 +124,28 @@ SDCachedStore subclass: SDFileStore [
 	 is corrupted, no partial writes, thus renaming files as atomic."
 
 	<category: 'actions'>
-	| currentVersion newVersion oldVersion dir anObject |
+	| currentVersion newVersion oldVersion dir anObject stream |
 	(cache at: origObject class) at: origObject id put: origObject.
 	anObject := origObject sandstoneDeepCopy sandstoneMarkReferences.
 	dir := self dirForClass: anObject class atId: anObject id.
-	currentVersion := dir fullNameFor: anObject id , '.obj'.
-	newVersion := currentVersion , '.new'.
-	oldVersion := currentVersion , '.old'.
+	currentVersion := dir at: anObject id , '.obj'.
+	newVersion := dir at: anObject id , '.obj.new'.
+	oldVersion := dir at: anObject id , '.obj.old'.
 	"just in case a previous commit failed and left junk around"
-	dir remove: newVersion.
+	oldVersion exists ifTrue: [oldVersion remove].
 	"the flush ensures all data is actually written to disk before moving on"
-	ObjectDumper nameAt: newVersion
-	    do: 
-		[:file | 
-		file
-		    sandstoneNextPutObjOnly: anObject;
-		    flush].
+	stream := FileStream open: newVersion name mode: FileStream write.
+	(ObjectDumper on: stream) dump: anObject.
+	stream close.
 	"just in case any junk was lying around that failed to die on last commit"
-	dir remove: oldVersion.
+	oldVersion exists ifTrue: [oldVersion remove].
 	"the pre-commit, on first save there won't be a current version, and fileExists is
 	 too expensive to check when it'll always be there except on first save"
-	[dir sandstoneRename: currentVersion toBe: oldVersion] ifError: [].
+	[currentVersion renameTo: oldVersion name] ifError: [].
 	"now the actual commit"
-	dir sandstoneRename: newVersion toBe: currentVersion.
+	newVersion renameTo: currentVersion name.
 	"clean up the junk (could fail if OS has lock on it for some reason)"
-	dir remove: oldVersion
+	oldVersion exists ifTrue: [oldVersion remove].
     ]
 
     updateObject: anObject [
@@ -187,8 +185,8 @@ SDCachedStore subclass: SDFileStore [
 	[parentClass == SDActiveRecord] whileFalse: 
 		[lineage addFirst: parentClass.
 		parentClass := parentClass superclass].
-	^File name: (lineage inject: self defaultBaseDirectory
-	    into: [:dir :each | File name: (dir nameAt: each name asString)])
+	^lineage inject: self defaultBaseDirectory into: [:dir :each | 
+	    File name: (dir nameAt: each name asString)]
     ]
 
     dirForClass: aClass atId: anId [

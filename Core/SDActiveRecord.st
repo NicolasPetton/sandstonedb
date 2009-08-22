@@ -60,7 +60,7 @@ Object subclass: SDActiveRecord [
 
     SDActiveRecord class >> new [
 	<category: 'instance creation'>
-	^self basicNew "initialize"
+	^self basicNew initialize
     ]
 
     SDActiveRecord class >> atId: anId [
@@ -206,7 +206,7 @@ Object subclass: SDActiveRecord [
 
     initialize [
 	<category: 'initialize-release'>
-	id := UUID new.
+	id := UUID new printString.
 	createdOn := updatedOn := DateTime now.
 	version := 0.
 	isNew := true
