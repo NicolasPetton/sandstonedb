@@ -55,17 +55,16 @@ SDActiveRecordTest subclass: SDFileStoreTest [
     testDeleteFailedCommits [
 	<category: 'running'>
 	kid save.
-	(store dirForClass: kid class atId: kid id) nameAt: kid id , '.obj'
-	    to: kid id , '.obj.new'.
+	((store dirForClass: kid class atId: kid id) at: kid id , '.obj.new') touch.
 	self assert: ((store dirForClass: kid class atId: kid id) 
-		    fileExists: kid id , '.obj').
+		    at: kid id , '.obj') exists.
 	self assert: ((store dirForClass: kid class atId: kid id) 
-		    fileExists: kid id , '.obj.new').
+		    at: kid id , '.obj.new') exists.
 	store deleteFailedCommitsForClass: kid class.
 	self assert: ((store dirForClass: kid class atId: kid id) 
-		    fileExists: kid id , '.obj').
+		    at: kid id , '.obj') exists.
 	self deny: ((store dirForClass: kid class atId: kid id) 
-		    fileExists: kid id , '.obj.new')
+		    at: kid id , '.obj.new') exists
     ]
 
     testDeleteOldVersions [
@@ -77,24 +76,23 @@ SDActiveRecordTest subclass: SDFileStoreTest [
 	kid delete.
 	self 
 	    assert: ((store dirForClass: kid class atId: id) 
-		    fileMatching: id , '\.*') isEmpty
+		    filesMatching: id , '\.*') isEmpty
     ]
 
     testFinishPartialCommits [
 	<category: 'running'>
 	kid save.
-	"File name: (/fds/fds/fds.obj) renameTo: ...."
-	File name: (store dirForClass: kid class atId: kid id) rename: kid id , '.obj'
-	    toBe: kid id , '.obj.new'.
+	((store dirForClass: kid class atId: kid id) at: kid id , '.obj')
+	    renameTo: ((store dirForClass: kid class atId: kid id) at: kid id , '.obj.new') name.
 	self deny: ((store dirForClass: kid class atId: kid id) 
-		    fileExists: kid id , '.obj').
+		    at: kid id , '.obj') exists.
 	self assert: ((store dirForClass: kid class atId: kid id) 
-		    fileExists: kid id , '.obj.new').
+		    at: kid id , '.obj.new') exists.
 	store finishPartialCommitsForClass: kid class.
 	self assert: ((store dirForClass: kid class atId: kid id) 
-		    fileExists: kid id , '.obj').
+		    at: kid id , '.obj') exists.
 	self deny: ((store dirForClass: kid class atId: kid id) 
-		    fileExists: kid id , '.obj.new')
+		    at: kid id , '.obj.new') exists
     ]
 
     testLoadMissingFile [
@@ -113,12 +111,12 @@ SDActiveRecordTest subclass: SDFileStoreTest [
 	loadTime := Time millisecondsToRun:
 	[SDActiveRecord resetStoreForLoad.
 	SDActiveRecord warmUpAllClasses].
-	Transcript
+	"Transcript
 	    show: commitTime printString;
 	    cr;
 	    show: loadTime printString;
 	    cr;
-	    cr.
+	    cr."
 	self assert: commitTime < (4*1000) "seconds"
     ]
 

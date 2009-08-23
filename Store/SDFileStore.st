@@ -87,9 +87,9 @@ SDCachedStore subclass: SDFileStore [
     loadClass: aClass atId: anId [
 	<category: 'actions'>
 	| file stream obj |
-	file := (self dirForClass: aClass atId: anId) at: anId, '.obj'.
+	[file := (self dirForClass: aClass atId: anId) at: anId, '.obj'.
 	stream := FileStream open: file name mode: FileStream read.
-	[obj := (ObjectDumper on: stream) load] 
+	obj := (ObjectDumper on: stream) load] 
 	    on: Error
 	    do: [:err | SDLoadError signal: err messageText].
 	stream close.
@@ -167,7 +167,7 @@ SDCachedStore subclass: SDFileStore [
 			 it's references so any backreferences to it don't try and load from
 			 disk again''"
 			(cache at: aClass) at: anId put: it.
-			it "sandstoneResolveReferences"]]
+			it sandstoneResolveReferences]]
     ]
 
     dirForClass: aClass [
@@ -231,7 +231,7 @@ SDCachedStore subclass: SDFileStore [
 
 	<category: 'crash recovery'>
 	[(self dirForClass: aClass) 
-	    allFilesMatching: '.new' 
+	    allFilesMatching: '*.new' 
 	    do: [:each | each remove]] 
 		on: Error
 		do: [:err | Transcript show: err]
@@ -243,7 +243,7 @@ SDCachedStore subclass: SDFileStore [
 
 	<category: 'crash recovery'>
 	[(self dirForClass: aClass)  
-	    allFilesMatching: '.new' 
+	    allFilesMatching: '*.new' 
 	    do: [:each || objFile dir |
 		    objFile := File name: (each name copyReplacingAllRegex: '.new' with: '').
 		    objFile exists ifFalse: [each renameTo: objFile name]]]

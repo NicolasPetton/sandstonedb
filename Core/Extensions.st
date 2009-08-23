@@ -82,7 +82,7 @@ Object extend [
 	"Make components of the introspectee which are
 	Sandstone references to active record to become active records.
 	Do this deeply (sub components)."
-	self class isMeta ifTrue: [^ self].
+	self class isMeta ifTrue: [^self].
 	self deservesSandstoneReferenceMark ifFalse: [^self].
 	visitedParts at: self ifPresent: [:it | ^ it ].
 	visitedParts at: self put: self.
@@ -211,7 +211,7 @@ Bag extend [
 	at which point the copying stops, and the actual references is returned."
 	| newObject |
 	visitedParts at: self ifPresent: [:it | ^ it ].
-	newObject := self copy.
+	newObject := self deepCopy.
 	newObject contents sandstoneDeepCopyVisits: visitedParts.
 	^newObject
     ]

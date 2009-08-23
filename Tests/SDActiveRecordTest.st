@@ -129,14 +129,14 @@ TestCase subclass: SDActiveRecordTest [
 	commitTime := Time millisecondsToRun: [people do: [:each | each save]].
 	lookupTime := Time millisecondsToRun: [people do: [:each | SDPersonMock atId: each id]].
 	deleteTime := Time millisecondsToRun: [people do: [:each | each delete]].
-	Transcript
+	"Transcript
 	    show: commitTime printString;
 	    cr;
 	    show: deleteTime printString;
 	    cr;
 	    show: lookupTime printString;
 	    cr;
-	    cr.
+	    cr."
 	self assert: commitTime < (4*1000) "seconds".
 	self assert: deleteTime < (3*1000) "seconds"
     ]
@@ -236,7 +236,7 @@ TestCase subclass: SDActiveRecordTest [
 	kid save.
 	self flushAndReload.
 	self assert: (SDPersonMock findAll class = Array).
-	self assert: (SDPersonMock findAll: [:each | each id = 'not' ]) class = Array
+	self assert: (SDPersonMock findAll: [:each | each id = 'not' ]) class = Array.
     ]
 
     testFindAllSubclasses [
@@ -254,9 +254,6 @@ TestCase subclass: SDActiveRecordTest [
 	self
 	    assert: 1
 	    equals: SDManMock findAll size.
-	self
-	    assert: 3
-	    equals: SDChildMock findAll size.
 	self
 	    assert: 2
 	    equals: SDChildMock findAll size.
