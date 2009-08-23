@@ -100,8 +100,7 @@ SDActiveRecordTest subclass: SDFileStoreTest [
     testLoadMissingFile [
 	<category: 'running'>
 	kid save.
-	(store dirForClass: kid class atId: kid id) 
-	    remove: kid id , '.obj'.
+	((store dirForClass: kid class atId: kid id) at: kid id, '.obj') remove. 
 	self should: [store loadClass: kid class atId: kid id] raise: SDLoadError
     ]
 
@@ -109,18 +108,18 @@ SDActiveRecordTest subclass: SDFileStoreTest [
 	<category: 'running'>
 	| commitTime people lookupTime loadTime |
 	people := (1 to: 100) collect: [:it | SDPersonMock testPerson].
-	commitTime := [people do: [:each | each save]] timeToRun milliSeconds.
-	lookupTime := [people do: [:each | SDPersonMock atId: each id]] timeToRun milliSeconds.
-	loadTime :=
+	commitTime := Time millisecondsToRun: [people do: [:each | each save]].
+	lookupTime := Time millisecondsToRun: [people do: [:each | SDPersonMock atId: each id]].
+	loadTime := Time millisecondsToRun:
 	[SDActiveRecord resetStoreForLoad.
-	SDActiveRecord warmUpAllClasses] timeToRun milliSeconds.
+	SDActiveRecord warmUpAllClasses].
 	Transcript
-	    show: commitTime;
+	    show: commitTime printString;
 	    cr;
-	    show: loadTime;
+	    show: loadTime printString;
 	    cr;
 	    cr.
-	self assert: commitTime < 4 seconds
+	self assert: commitTime < (4*1000) "seconds"
     ]
 
     testSaveMissingFile [
