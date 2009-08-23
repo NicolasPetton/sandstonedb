@@ -204,7 +204,7 @@ Boolean extend [
 ]
 
 Bag extend [
-    
+
     sandstoneDeepCopyVisits: visitedParts [
 	<category: '*sandstonedb'>
 	"sandstoneDeepCopy works just like deepCopy until it hits another active record
@@ -212,7 +212,7 @@ Bag extend [
 	| newObject |
 	visitedParts at: self ifPresent: [:it | ^ it ].
 	newObject := self copy.
-	newObject valuesAndCounts sandstoneDeepCopyVisits: visitedParts.
+	newObject contents sandstoneDeepCopyVisits: visitedParts.
 	^newObject
     ]
 
@@ -226,7 +226,7 @@ Bag extend [
 	self deservesSandstoneReferenceMark ifFalse: [^self].
 	visitedParts at: self ifPresent: [:it | ^self].
 	visitedParts at: self put: self.
-	self valuesAndCounts sandstoneMarkReferencesVisits: visitedParts.
+	self contents sandstoneMarkReferencesVisits: visitedParts.
 	^self
     ]
 
@@ -239,7 +239,7 @@ Bag extend [
 	self class isMeta ifTrue: [^self].
 	visitedParts at: self ifPresent: [:it | ^self].
 	visitedParts at: self put: self.
-	self copy valuesAndCounts sandstoneResolveReferencesVisits: visitedParts.
+	self copy contents sandstoneResolveReferencesVisits: visitedParts.
 	^self
     ]
 ]

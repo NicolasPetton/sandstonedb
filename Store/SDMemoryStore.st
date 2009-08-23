@@ -83,7 +83,7 @@ SDCachedStore subclass: SDMemoryStore [
 	^(cache at: aClass) at: anId
 	    ifAbsent: 
 		[([self loadClass: aClass atId: anId] on: SDLoadError do: [nil]) 
-		    ifNotNilDo: 
+		    ifNotNil: 
 			[:it | 
 			"seems I have to make sure to cache the object before I can resolve
 			 it's references so any backreferences to it don't try and load from

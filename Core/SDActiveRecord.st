@@ -330,7 +330,7 @@ Object subclass: SDActiveRecord [
 		[:s | 
 		self class allInstVarNames do: 
 			[:each | 
-			(self instVarNamed: each) ifNotNilDo: 
+			(self instVarNamed: each) ifNotNil: 
 				[:value | 
 				s
 				    nextPutAll: value asString;

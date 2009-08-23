@@ -128,8 +128,7 @@ SDActiveRecordTest subclass: SDFileStoreTest [
 	self assert: kid isNew.
 	kid save.
 	self deny: kid isNew.
-	(store dirForClass: kid class atId: kid id) 
-	    remove: kid id , '.obj'.
+	((store dirForClass: kid class atId: kid id) at: kid id , '.obj') remove.
 	kid save.
 	self deny: kid isNew
     ]
@@ -141,12 +140,12 @@ SDActiveRecordTest subclass: SDFileStoreTest [
 	| ids legalNames |
 	legalNames := (0 to: 9) collect: [:e | e printString].
 	ids := Set new: 1000.
-	1000 timesRepeat: [ids add: UUID new asString36].
+	1000 timesRepeat: [ids add: UUID new printString].
 	ids add: 'abaoblwgnaydxokccorveamoq'.
 	ids do: 
 		[:anId | 
 		self assert: (legalNames 
-			    includes: (store dirForClass: SDPersonMock atId: anId) localName)]
+			includes: (store dirForClass: SDPersonMock atId: anId) stripPath)]
     ]
 ]
 
