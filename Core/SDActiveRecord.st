@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDActiveRecord class definition
+|   SandstoneDb.SDActiveRecord class definition
 |
  ======================================================================"
 

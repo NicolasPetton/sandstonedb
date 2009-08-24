@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDCachedStore class definition
+|   SandstoneDb.SDCachedStore class definition
 |
  ======================================================================"
 

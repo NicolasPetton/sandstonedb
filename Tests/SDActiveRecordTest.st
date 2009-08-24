@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDActiveRecordTest class definition
+|   SandstoneDb.SDActiveRecordTest class definition
 |
  ======================================================================"
 

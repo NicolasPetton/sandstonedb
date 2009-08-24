@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDMemoryStoreTest class definition
+|   SandstoneDb.SDMemoryStoreTest class definition
 |
  ======================================================================"
 

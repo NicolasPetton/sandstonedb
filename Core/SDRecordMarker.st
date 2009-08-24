@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDRecordMarker class definition
+|   SandstoneDb.SDRecordMarker class definition
 |
  ======================================================================"
 

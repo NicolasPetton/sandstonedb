@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDGrandChildMock class definition
+|   SandstoneDb.SDGrandChildMock class definition
 |
  ======================================================================"
 

@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDAbstractStore class definition
+|   SandstoneDb.SDAbstractStore class definition
 |
  ======================================================================"
 

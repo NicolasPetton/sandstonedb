@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDWomanMock class definition
+|   SandstoneDb.SDWomanMock class definition
 |
  ======================================================================"
 

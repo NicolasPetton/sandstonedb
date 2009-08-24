@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDFileStore class definition
+|   SandstoneDb.SDFileStore class definition
 |
  ======================================================================"
 
@@ -55,7 +55,7 @@ SDCachedStore subclass: SDFileStore [
 			    addCachedOfClass: anObject class
 			    at: anObject id
 			    put: anObject]
-		    ifNotNil: [anObject become: diskVersion]]
+		    ifNotNil: [anObject becomeForward: diskVersion]]
     ]
 
     addCachedOfClass: aClass at: anId put: anObject [
@@ -161,7 +161,8 @@ SDCachedStore subclass: SDFileStore [
 	<category: 'queries'>
 	^(cache at: aClass) at: anId
 	    ifAbsent: 
-		[([self loadClass: aClass atId: anId] on: SDLoadError do: [nil]) 
+		[
+		([self loadClass: aClass atId: anId] on: SDLoadError do: [nil]) 
 		    ifNotNil: [:it | 
 			"seems I have to make sure to cache the object before I can resolve
 			 it's references so any backreferences to it don't try and load from

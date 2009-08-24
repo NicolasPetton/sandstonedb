@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDPersonMock class definition
+|   SandstoneDb.SDPersonMock class definition
 |
  ======================================================================"
 

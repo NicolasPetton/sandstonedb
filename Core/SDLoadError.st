@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDLoadError class definition
+|   SandstoneDb.SDLoadError class definition
 |
  ======================================================================"
 

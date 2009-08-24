@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDConcurrentDictionary class definition
+|   SandstoneDb.SDConcurrentDictionary class definition
 |
  ======================================================================"
 

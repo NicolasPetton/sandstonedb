@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDMemoryStore class definition
+|   SandstoneDb.SDMemoryStore class definition
 |
  ======================================================================"
 

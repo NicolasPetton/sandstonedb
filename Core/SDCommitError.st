@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDCommitError class definition
+|   SandstoneDb.SDCommitError class definition
 |
  ======================================================================"
 

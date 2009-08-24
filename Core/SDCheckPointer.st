@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDCheckPointer class definition
+|   SandstoneDb.SDCheckPointer class definition
 |
  ======================================================================"
 

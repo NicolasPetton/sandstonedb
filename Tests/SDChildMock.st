@@ -1,6 +1,6 @@
 "======================================================================
 |
-|   Sandstone.SDChildMock class definition
+|   SandstoneDb.SDChildMock class definition
 |
  ======================================================================"
 

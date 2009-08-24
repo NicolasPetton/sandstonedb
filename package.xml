@@ -1,6 +1,6 @@
 <package>
-  <name>Sandstone</name>
-  <namespace>Sandstone</namespace>
+  <name>SandstoneDb</name>
+  <namespace>SandstoneDb</namespace>
   <prereq>SUnit</prereq>
   <test>
     <filein>Tests/SDGrandChildMock.st</filein>
@@ -24,9 +24,9 @@
     <file>Tests/SDPersonMock.st</file>
     <file>Tests/SDMemoryStoreTest.st</file>
     <sunit>
-      Sandstone.SDActiveRecordTest
-      Sandstone.SDFileStoreTest
-      Sandstone.SDMemoryStoreTest
+      SandstoneDb.SDActiveRecordTest
+      SandstoneDb.SDFileStoreTest
+      SandstoneDb.SDMemoryStoreTest
     </sunit>
   </test>
   <filein>Core/Extensions.st</filein>
