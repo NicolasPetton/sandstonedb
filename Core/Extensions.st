@@ -176,7 +176,7 @@ Array extend [
     
     deservesSandstoneReferenceMark [
 	<category: '*sandstonedb'>
-	^ {Array. DependentsArray. WeakArray } includes: self class
+	^ {Array. WeakArray } includes: self class
     ]
 ]
 
