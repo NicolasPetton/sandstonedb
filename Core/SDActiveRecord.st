@@ -168,11 +168,6 @@ Object subclass: SDActiveRecord [
 	    ifNil: [locks := SDConcurrentDictionary on: (WeakKeyDictionary new: 10000)]
     ]
 
-    SDActiveRecord class >> defaultDictionary [
-	<categroy: 'defaults'>
-	^Dictionary
-    ]
-   
     SDActiveRecord class >> defaultHashSize [
 	<category: 'defaults'>
 	^100
@@ -180,7 +175,7 @@ Object subclass: SDActiveRecord [
 
     SDActiveRecord class >> defaultIdentityDictionary [
 	<category: 'defaults'>
-	^IdentityDictionary
+	^IdentityDictionary new: self defaultHashSize
     ]
     
     SDActiveRecord class >> initialize [
@@ -212,18 +207,27 @@ Object subclass: SDActiveRecord [
 	isNew := true
     ]
 
-    = anObject [
-	"asking the object isMemberOf ensures that if it's a proxy that message
-	 will be forwarded to the real object.  Checking this condition in reverse
-	 anObject class, will fail because anObject class will be the ProxyClass"
-	<category: 'comparing'>
-
-	^(anObject isMemberOf: self class) and: [id = anObject id]
+    sandstoneDeepCopy [
+	"Replaces the receiver (sub) active records
+	with Sandstone references where it is needed"
+	<category: 'serialization'>
+    
+	^self sandstoneDeepCopyVisits: 
+	    self class defaultIdentityDictionary
     ]
 
-    hash [
-	<category: 'comparing'>
-	^id hash
+    sandstoneMarkReferences [
+	"Replaces the receiver (sub) active records
+	with Sandstone references where it is needed"
+	<category: 'serialization'>
+	^self sandstoneMarkReferencesVisits: self class defaultIdentityDictionary
+    ]
+
+    sandstoneResolveReferences [
+	"Replaces the receiver markers with
+	active records where it is needed"
+	<category: 'serialization'>
+	^self sandstoneResolveReferencesVisits: self class defaultIdentityDictionary
     ]
 
     abortChanges [
@@ -285,13 +289,12 @@ Object subclass: SDActiveRecord [
 
     asReferenceMarker [
 	<category: 'converting'>
-	isNew 
-	    ifTrue: 
-		["Programmers may reach this point several times until they
-		get the intended use of this solution. This is expected **by
-		design** to make atomic saves really small and consistent.
-		Commits of active records which have other active records as
-		parts (at any deep) are restricted intentionally. They only are
+	isNew ifTrue: [
+		"You may reach this point several times before you get the
+		intended use of this solution. This is expected **by design** 
+		to make atomic saves really small and consistent.Commits of 
+		active records which have other active records as parts 
+		(at any depth) are restricted intentionally. They only are
 		allowed when all its sub active records are previously commited.
 		Only the programmer knows the proper logical commit order for
 		his data!! This is not a relational database, if you absolutely

@@ -1,13 +1,5 @@
 Object extend [
     
-    sandstoneDeepCopy [
-	<category: '*sandstonedb-serialization'>
-    
-	"Replaces the receiver (sub) active records
-	with Sandstone references where it is needed"
-	^self sandstoneDeepCopyVisits: (SDActiveRecord defaultIdentityDictionary new: SDActiveRecord defaultHashSize)
-    ]
-
     sandstoneDeepCopyVisits: visitedParts [
 	<category: '*sandstonedb-serialization'>
 	"sandstoneDeepCopy works just like deepCopy until it hits another active record
@@ -25,7 +17,9 @@ Object extend [
 			put: ((self basicAt: index) sandstoneDeepCopyVisits: visitedParts).
 		    index := index - 1 ]]
 		ifFalse: [ newObject := class basicNew ].
-	    visitedParts at: self put: newObject.
+	    visitedParts 
+		at: self 
+		put: newObject.
 	    index := class instSize.
 	    [ index > 0 ] whileTrue:
 		[ value := self instVarAt: index.
@@ -36,16 +30,6 @@ Object extend [
 			ifFalse: [ value sandstoneDeepCopyVisits: visitedParts ]).
 		    index := index - 1].
 		^newObject
-    ]
-
-    sandstoneMarkReferences [
-	<category: '*sandstonedb-serialization'>
-
-	"Replaces the receiver (sub) active records
-	with Sandstone references where it is needed"
-	^self sandstoneMarkReferencesVisits: 
-	    (SDActiveRecord defaultIdentityDictionary new: 
-		SDActiveRecord defaultHashSize)
     ]
 
     sandstoneMarkReferencesVisits: visitedParts [
@@ -68,13 +52,6 @@ Object extend [
 			put: var asReferenceMarker]
 		ifFalse: [var sandstoneMarkReferencesVisits: visitedParts]].
 	^self
-    ]
-
-    sandstoneResolveReferences [
-	<category: '*sandstonedb-serialization'>
-	"Replaces the receiver markers with
-	active records where it is needed"
-	^self sandstoneResolveReferencesVisits: (SDActiveRecord defaultIdentityDictionary new: SDActiveRecord defaultHashSize)
     ]
 
     sandstoneResolveReferencesVisits: visitedParts [
@@ -133,6 +110,7 @@ Collection extend [
 	    each isSandstoneActiveRecord ifFalse:
 		[ newObject remove: each.
 		newObject add: (each sandstoneDeepCopyVisits: visitedParts) ]].
+	visitedParts at: self put: newObject.
 	^newObject
     ]
     
@@ -160,7 +138,7 @@ Collection extend [
 	Sandstone references to active record to become active records.
 	Do this deeply (sub components)."
 	self class isMeta ifTrue: [^self].
-	visitedParts at: self ifPresent: [:it | ^self].
+	visitedParts at: self ifPresent: [:it | ^it].
 	visitedParts at: self put: self.
 	"It is crucial to modify the introspectee by iterating a copy of it"
 	self copy doWithIndex:
@@ -213,6 +191,7 @@ Bag extend [
 	visitedParts at: self ifPresent: [:it | ^ it ].
 	newObject := self deepCopy.
 	newObject contents sandstoneDeepCopyVisits: visitedParts.
+	visitedParts at: self put: newObject.
 	^newObject
     ]
 
@@ -231,15 +210,15 @@ Bag extend [
     ]
 
     sandstoneResolveReferencesVisits: visitedParts [
-	<category:'*sandstonedb'>
 	"Make components of the introspectee which are
 	Sandstone references to active record to become active records.
 	Do this deeply (sub components)."
-
+	<category:'*sandstonedb'>
+	
 	self class isMeta ifTrue: [^self].
-	visitedParts at: self ifPresent: [:it | ^self].
+	visitedParts at: self ifPresent: [:it | ^it].
 	visitedParts at: self put: self.
-	self copy contents sandstoneResolveReferencesVisits: visitedParts.
+	self valuesAndCounts sandstoneResolveReferencesVisits: visitedParts.
 	^self
     ]
 ]
@@ -277,13 +256,13 @@ Dictionary extend [
 	at which point the copying stops, and the actual references is returned."
 	|newObject|
 	visitedParts at: self ifPresent: [ :it | ^it].
-	newObject := self copy.
-	newObject keysAndValuesDo:
-	    [:key :each |
-	    each isSandstoneActiveRecord ifFalse:
-		[newObject 
-		    at: key
-		    put: (each sandstoneDeepCopyVisits: visitedParts)]].
+	newObject := self class new: self size.
+	self keysAndValuesDo:
+	    [:key :value |
+	    newObject 
+		    at: (key sandstoneDeepCopyVisits: visitedParts)
+		    put: (value sandstoneDeepCopyVisits: visitedParts)].
+	visitedParts at: self put: newObject.
 	^newObject
     ]	
 
@@ -297,11 +276,18 @@ Dictionary extend [
 	self deservesSandstoneReferenceMark ifFalse: [^self].
 	visitedParts at: self ifPresent: [:it | ^self].
 	visitedParts at: self put: self.
-	self keysAndValuesDo:
-	    [:key :each |
-	    each isSandstoneActiveRecord
-		ifTrue: [self at: key put: each asReferenceMarker]
-		ifFalse: [each sandstoneMarkReferencesVisits:  visitedParts]].
+	"it is crucial to modify the introspectee by iterating a copy of it"
+	self copy keysAndValuesDo:
+	    [:key :value | | newKey newValue |
+	    newKey := key.
+	    newValue := value.
+	    key isSandstoneActiveRecord
+		ifTrue: [ newKey := key asReferenceMarker ]
+		ifFalse: [ key sandstoneMarkReferencesVisits:  visitedParts ].
+	    value isSandstoneActiveRecord
+		ifTrue: [ newKey := key asReferenceMarker ]
+		ifFalse: [ value sandstoneMarkReferencesVisits: visitedParts ].
+	    key = newKey put: newValue ].
 	^self
     ]
 
@@ -312,15 +298,19 @@ Dictionary extend [
 	Sandstone references to active record to become active records.
 	Do this deeply (sub components)."
 	self class isMeta ifTrue: [^self].
-	visitedParts at: self ifPresent: [:it | ^self].
+	visitedParts at: self ifPresent: [ :it | ^ it ].
 	visitedParts at: self put: self.
 	"It is crucial to modify the introspectee by iterating a copy of it"
 	self copy keysAndValuesDo:
-	    [ :key :each |
-	    each isSandstoneMarker
-		ifTrue: [self at: key put: each asOriginalObject]
-		ifFalse: [each sandstoneResolveReferencesVisits: visitedParts]].
-	^self
+	    [ :key :value | | newKey newValue |
+	    newKey := key.
+	    newValue := value.
+	    key isSandstoneMarker
+		ifTrue: [ newKey := key asOriginalObject ]
+		ifFalse: [ key sandstoneResolveReferencesVisits: visitedParts ].
+	key = newKey ifFalse: [ self removeKey: key ].
+	self at: newKey put: newValue ].	
+    ^self
     ]
 ]
 
@@ -390,13 +380,20 @@ SequenceableCollection extend [
 	"sandstoneDeepCopy works just like deepCopy until it hits another active record
 	at which point the copying stops, and the actual references is returned."
 	| newObject |
-	visitedParts at: self ifPresent: [:it | ^it ].
+	visitedParts 
+	    at: self 
+	    ifPresent: [:it | ^it ].
 	newObject := self copy.
 	"optimized implementation taking advantaged of ordering"
 	newObject doWithIndex:
 	    [:each :index |
 	    each isSandstoneActiveRecord ifFalse:
-		[ newObject at: index put: (each sandstoneDeepCopyVisits: visitedParts)]].
+		[ newObject 
+		    at: index 
+		    put: (each sandstoneDeepCopyVisits: visitedParts)]].
+	visitedParts
+	    at: self
+	    put: newObject.
 	^newObject
     ]
 
@@ -436,7 +433,7 @@ Set extend [
 	Sandstone references to active record to become active records.
 	Do this deeply (sub components)."
 	self class isMeta ifTrue: [^self].
-	visitedParts at: self ifPresent: [:it | ^self].
+	visitedParts at: self ifPresent: [:it | ^it].
 	visitedParts at: self put: self.
 	"It is crucial to modify the introspectee by iterating a copy of it"
 	self copy doWithIndex:

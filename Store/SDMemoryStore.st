@@ -52,6 +52,7 @@ SDCachedStore subclass: SDMemoryStore [
 	<category: 'initialization'>
 
 	Cache := Dictionary new.
+	cache := Dictionary new
     ]
 
      SDMemoryStore class >> new [

@@ -205,6 +205,19 @@ TestCase subclass: SDActiveRecordTest [
 	self assert: (SDManMock find: [:each | each id = kid id]) isNil
     ]
 
+    testDictionaryKeys [
+	<category: 'running'>
+	| dad |
+	dad := SDManMock testPerson save.
+	kid save.
+	mom children: (Dictionary with: dad -> kid).
+	mom save.
+	self flushAndReload.
+	self
+	    assert: (mom refreshed children at: dad refreshed)
+	    equals: kid refreshed
+    ]
+
     testDictionarySerialization [
 	<category: 'running'>
 	kid save.
@@ -451,23 +464,26 @@ TestCase subclass: SDActiveRecordTest [
 
     testDictionaryWithArrays [
 	<category: 'testing'>
-	| foo |
+	| foo fooCopy |
+	kid save.
 	3 timesRepeat: [SDManMock new save].
-	foo := (FooObject new)
-		    dict: ((Dictionary new)
-				at: #bar put: SDManMock findAll;
-				at: #baz put: SDManMock findAll;
-				yourself);
-		    yourself.
-
+	foo := FooObject new
+	    dict: (Dictionary with: kid -> SDManMock findAll);
+	    yourself.
+	fooCopy := foo sandstoneDeepCopy.
+	self deny: foo == fooCopy.
+	self deny: fooCopy dict == foo dict.
 	"Works fine before saving the object"
-	foo dict 
-	    keysAndValuesDo: [:key :value | value do: [:each | self assert: (each isKindOf: SDManMock)]].
-	foo save.
-
-	"now fails"
-	foo dict 
-	    keysAndValuesDo: [:key :value | value do: [:each | self assert: (each isKindOf: SDManMock)]]
+	foo dict keysAndValuesDo: [:key :value | 
+	    self assert: (key isKindOf: SDPersonMock).
+	    value do: [:each | self assert: (each isKindOf: SDManMock)]].
+	fooCopy sandstoneMarkReferences.
+	"should still work, otherwise save is somehow modifying 
+	original object instead of deepCopy of it"
+	foo dict keysAndValuesDo: [:key :value | 
+	    self assert: (key isKindOf: SDPersonMock).
+	    value do: [:each | 
+		self assert: (each isKindOf: SDManMock)]]
     ]
 ]
 
