@@ -9,14 +9,14 @@ Object extend [
 	class := self class.
 	class isVariable
 	    ifTrue:
-		[ index := self basicSize.
+		[index := self basicSize.
 		newObject := class basicNew: index.
-		[ index > 0 ] whileTrue:
-		    [ newObject
+		[index > 0 ] whileTrue:
+		    [newObject
 			basicAt: index
 			put: ((self basicAt: index) sandstoneDeepCopyVisits: visitedParts).
-		    index := index - 1 ]]
-		ifFalse: [ newObject := class basicNew ].
+		    index := index - 1]]
+		ifFalse: [newObject := class basicNew].
 	    visitedParts 
 		at: self 
 		put: newObject.
@@ -26,8 +26,8 @@ Object extend [
 		newObject
 		    instVarAt: index
 		    put: (value isSandstoneActiveRecord
-			ifTrue: [ value ]
-			ifFalse: [ value sandstoneDeepCopyVisits: visitedParts ]).
+			ifTrue: [value]
+			ifFalse: [value sandstoneDeepCopyVisits: visitedParts]).
 		    index := index - 1].
 		^newObject
     ]
@@ -260,23 +260,25 @@ Dictionary extend [
 	self keysAndValuesDo:
 	    [:key :value |
 	    newObject 
-		    at: (key sandstoneDeepCopyVisits: visitedParts)
-		    put: (value sandstoneDeepCopyVisits: visitedParts)].
+		at: (key sandstoneDeepCopyVisits: visitedParts)
+		put: (value sandstoneDeepCopyVisits: visitedParts)].
 	visitedParts at: self put: newObject.
 	^newObject
     ]	
 
     sandstoneMarkReferencesVisits: visitedParts [
-	<category: '*sandstonedb'>
-	
 	"Make components of the instrospectee which are
 	Sandstone active records to become references.
 	Do this deeply (sub components)."
+	<category: '*sandstonedb'>
+	
 	self class isMeta ifTrue: [^self].
 	self deservesSandstoneReferenceMark ifFalse: [^self].
 	visitedParts at: self ifPresent: [:it | ^self].
 	visitedParts at: self put: self.
+
 	"it is crucial to modify the introspectee by iterating a copy of it"
+	
 	self copy keysAndValuesDo:
 	    [:key :value | | newKey newValue |
 	    newKey := key.
@@ -285,9 +287,10 @@ Dictionary extend [
 		ifTrue: [ newKey := key asReferenceMarker ]
 		ifFalse: [ key sandstoneMarkReferencesVisits:  visitedParts ].
 	    value isSandstoneActiveRecord
-		ifTrue: [ newKey := key asReferenceMarker ]
+		ifTrue: [ newValue := value asReferenceMarker ]
 		ifFalse: [ value sandstoneMarkReferencesVisits: visitedParts ].
-	    key = newKey put: newValue ].
+	    key = newKey ifFalse: [self removeKey: key].
+	    self at: newKey put: newValue].
 	^self
     ]
 
@@ -297,10 +300,13 @@ Dictionary extend [
 	"Make components of the introspectee which are
 	Sandstone references to active record to become active records.
 	Do this deeply (sub components)."
+	
 	self class isMeta ifTrue: [^self].
 	visitedParts at: self ifPresent: [ :it | ^ it ].
 	visitedParts at: self put: self.
+	
 	"It is crucial to modify the introspectee by iterating a copy of it"
+	
 	self copy keysAndValuesDo:
 	    [ :key :value | | newKey newValue |
 	    newKey := key.
@@ -308,9 +314,12 @@ Dictionary extend [
 	    key isSandstoneMarker
 		ifTrue: [ newKey := key asOriginalObject ]
 		ifFalse: [ key sandstoneResolveReferencesVisits: visitedParts ].
-	key = newKey ifFalse: [ self removeKey: key ].
-	self at: newKey put: newValue ].	
-    ^self
+	    value isSandstoneMarker
+		ifTrue: [newValue := value asOriginalObject]
+		ifFalse: [value sandstoneResolveReferencesVisits: visitedParts].
+	    key = newKey ifFalse: [ self removeKey: key ].
+	    self at: newKey put: newValue ].	
+	^self
     ]
 ]
 
@@ -387,8 +396,8 @@ SequenceableCollection extend [
 	"optimized implementation taking advantaged of ordering"
 	newObject doWithIndex:
 	    [:each :index |
-	    each isSandstoneActiveRecord ifFalse:
-		[ newObject 
+	    each isSandstoneActiveRecord ifFalse: [ 
+		newObject 
 		    at: index 
 		    put: (each sandstoneDeepCopyVisits: visitedParts)]].
 	visitedParts

@@ -307,7 +307,7 @@ Object subclass: SDActiveRecord [
 		SDCommitError 
 		    signal: 'An object is being saved while referencing an unsaved peer of type ' 
 			    , self class name , '.  You must save that record first!'].
-	^(SDRecordMarker new)
+	^SDRecordMarker new
 	    id: id;
 	    className: self class name;
 	    environment: self class environment;
